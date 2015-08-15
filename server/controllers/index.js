@@ -1,10 +1,10 @@
 var express = require('express')
   , router = express.Router();
 
-router.use('/home', require('./home'));
-router.use('/server', require('./server'));
-router.use('/player', require('./player'));
-router.use('/match', require('./match'));
+router.use('/api/home', require('./home'));
+router.use('/api/server', require('./server'));
+router.use('/api/player', require('./player'));
+router.use('/api/match', require('./match'));
 router.use('/', require('./root'));
 
 

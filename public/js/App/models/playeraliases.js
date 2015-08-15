@@ -1,11 +1,12 @@
 ﻿var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
+var statics = require('../modules/static')
 Backbone.$ = $;
 var Cacheable = require('./cacheable');
 
 var PlayerAliases = Cacheable.extend({
-    urlRoot: 'http://servers.quakeone.com/stats/PlayerAliasLookup',
+    urlRoot: statics.serverRoot + '/api/player/alias',
     idAttribute: 'PlayerId',
 
     parse: function (data) {

@@ -5,7 +5,7 @@ var Backbone = require('backbone');
 Backbone.$ = $;
 
 var Server = Backbone.Model.extend({
-    urlRoot:  statics.serverRoot + '/server/list',
+    urlRoot:  statics.serverRoot + '/api/server/list',
     parse: function (data) {
         return data;
     }

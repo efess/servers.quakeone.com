@@ -46,10 +46,10 @@ var ServerListView = Backbone.View.extend({
             toggle: this.autoRefresh ? "on" : "off"
         };
 
-        if (!this.model.has('Servers')) {
+        if (!this.model.has('servers')) {
             this.model.fetch();
         } else {
-            var servers = this.model.get('Servers');
+            var servers = this.model.get('servers');
 
 
             var sorting = {

@@ -5,7 +5,7 @@ var statics = require('../modules/static')
 Backbone.$ = $;
 
 var Match = Backbone.Model.extend({
-    urlRoot: statics.serverRoot + '/match/detail',
+    urlRoot: statics.serverRoot + '/api/match/detail',
     idAttribute: 'MatchId'
 });
 

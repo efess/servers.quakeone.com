@@ -5,6 +5,31 @@ var r = require('ramda');
 var xml = require('xml2js');
 var util = require('../helpers/util')
 
+var getPagedMatches = function(storedProc, id, recordOffset, recordCount, recordMap){
+    var payload = {
+        TotalRecords: 0,
+        Records: []
+    };
+    
+    return db.query('CALL ' + storedProc + 'Count(?)', id)
+        .then(r.compose(r.head,r.head))
+        .then(function(result){
+            payload.TotalRecords = result.RecordCount;
+            if(payload.TotalRecords) {
+                return db.query('CALL ' + storedProc + '(?, ?, ?)',[id, recordCount, recordOffset])
+                    .then(r.head)
+                    .then(function(results) {
+                        payload.Records = recordMap ? r.map(recordMap, results) : results;
+                        
+                        return payload;    
+                    });
+            } else {
+                return payload.TotalRecords;
+            }
+        });
+    
+};
+
 var match = {
     recentMatches: (function(){
         var fieldMap = util.fieldMap({
@@ -71,27 +96,20 @@ var match = {
         };
     }()),
     getMatchByPlayer: function(playerId, recordOffset, recordCount) {
-        var payload = {
-            TotalRecords: 0,
-            Records: []
-        };
-        
-        return db.query('CALL spPlayerMatchesCount(?)', playerId)
-            .then(r.compose(r.head,r.head))
-            .then(function(result){
-                payload.TotalRecords = result.RecordCount;
-                if(payload.TotalRecords) {
-                    return db.query('CALL spPlayerMatches(?, ?, ?)',[playerId, recordCount, recordOffset])
-                        .then(r.head)
-                        .then(function(results) {
-                            payload.Records = results;
-                            
-                            return payload;    
-                        });
-                } else {
-                    return payload.TotalRecords;
-                }
-            });
+        return getPagedMatches('spPlayerMatches', playerId, recordOffset, recordCount);
+    },
+    getMatchByServer: function(serverId, recordOffset, recordCount) {
+        var matchMap = util.fieldMap({
+            "MatchId": "MatchId",
+            "ServerId": "ServerId",
+            "HostName": "HostName",
+            "Map": "Map",
+            "Mod" : "Modification",
+            "MatchStart": "MatchStart",
+            "MatchDuration": "MatchDuration",
+            "PlayerCount": "PlayerCount"
+        });
+        return getPagedMatches('spServerMatches', serverId, recordOffset, recordCount, matchMap);
     }
 };
 

@@ -34,7 +34,7 @@ var ServerDetailMatchesView = SupportsPagination.extend({
             }, this);
             $('#paginator',this.el).append(this.getPaginator());
         } else {
-            this.model.fetch({ data: { pageSize: self.pageCount, pageNumber:self.pageNumber }, type: 'POST' });
+            this.model.fetch({ data: { pageSize: self.pageCount, pageNumber:self.pageNumber }, type: 'GET' });
         }
 
         return this;

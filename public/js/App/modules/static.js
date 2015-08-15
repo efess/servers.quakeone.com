@@ -7,7 +7,7 @@ var NameMaker = require('./nameMaker');
 var Static = {  
     initialize: function () {
         // put this here.. for now..
-        this.nameMaker = new NameMaker('public/content/charsets/quake1/charset-1.png')
+        this.nameMaker = new NameMaker('/content/charsets/quake1/charset-1.png')
         
     },
     serverRoot: "http://localhost:8080",

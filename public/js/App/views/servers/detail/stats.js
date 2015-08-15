@@ -3,8 +3,6 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 Backbone.$ = $;
 var Static = require('../../../modules/static');
-
-var Static = require('../../../models/serverstats');
 var DateTime = require('../../../modules/datetime');
 
 var Chart = require('../../../../../lib/chart.js');
@@ -64,52 +62,52 @@ var ServerDetailStatsView = Backbone.View.extend({
 
         var maxValue = _.max(percentageArray, function (value) { return value[0]; })[0];
 
-        $.plot($("#mapPercentageChart"), [
-            {
-                data: percentageArray,
-                bars: 
-                    {
-                        //barWidth: 6,
-                        barWidth: 0.5,
-                        align: "center",
+        // $.plot($("#mapPercentageChart"), [
+        //     {
+        //         data: percentageArray,
+        //         bars: 
+        //             {
+        //                 //barWidth: 6,
+        //                 barWidth: 0.5,
+        //                 align: "center",
 
-                        horizontal: true,
-                    show:true
-                    }, valueLabels: {
-                        show: true,
-                        plotAxis: "x",
-                        labelFormatter: function (val) {
-                            return val + "%";
-                        }
-                        , font: '14px "Helvetica Neue", Helvetica, Arial, sans-serif'
-                    }
-            }],
-            {
-                grid: {
-                    borderWidth: 0
-                },
-                yaxis: {
-                    show: true,
-                    tickLength: 0,
-                    tickSize: 1,
-                    tickFormatter: function (val, axis) {
-                        return ticks[val] || '';
-                        //return val;
-                    },
-                    font:{
-                        size: 14,
-                        weight: "bold",
-                        family: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        color: '#000000'
-                    } 
+        //                 horizontal: true,
+        //             show:true
+        //             }, valueLabels: {
+        //                 show: true,
+        //                 plotAxis: "x",
+        //                 labelFormatter: function (val) {
+        //                     return val + "%";
+        //                 }
+        //                 , font: '14px "Helvetica Neue", Helvetica, Arial, sans-serif'
+        //             }
+        //     }],
+        //     {
+        //         grid: {
+        //             borderWidth: 0
+        //         },
+        //         yaxis: {
+        //             show: true,
+        //             tickLength: 0,
+        //             tickSize: 1,
+        //             tickFormatter: function (val, axis) {
+        //                 return ticks[val] || '';
+        //                 //return val;
+        //             },
+        //             font:{
+        //                 size: 14,
+        //                 weight: "bold",
+        //                 family: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        //                 color: '#000000'
+        //             } 
 
-                },
-                xaxis: {
-                    min: 0,
-                    max: maxValue > 80 ? 100 : maxValue + 15,
-                    show: true
-                }
-            });
+        //         },
+        //         xaxis: {
+        //             min: 0,
+        //             max: maxValue > 80 ? 100 : maxValue + 15,
+        //             show: true
+        //         }
+        //     });
     },
     applyNameMaker: function () {
 

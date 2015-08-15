@@ -5,6 +5,10 @@
   "main": "main.js",
   "scripts": {},
   "author": "Joe Lukacovic",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/efess/servers.quakeone.com"
+  },
   "dependencies": {
     "backbone": "^1.2.1",
     "body-parser": "^1.13.3",

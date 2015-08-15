@@ -5,7 +5,7 @@ var statics = require('../modules/static.js')
 Backbone.$ = $;
 
 var Home = Backbone.Model.extend({
-    urlRoot: statics.serverRoot + '/home/summary',
+    urlRoot: statics.serverRoot + '/api/home/summary',
     parse: function (data) {
         return {
             servers: data.homedata.servers,

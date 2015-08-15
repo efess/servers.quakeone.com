@@ -1,11 +1,12 @@
 ﻿var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
+var statics = require('../modules/static');
 Backbone.$ = $;
 var Cacheable = require('./cacheable');
 
 var PlayerSearch = Backbone.Model.extend({
-    urlRoot: 'http://servers.quakeone.com/stats/PlayerLookup',
+    urlRoot: statics.serverRoot + '/api/player/lookup',
     parse: function (data) {
         if (!data.players) {
             return {

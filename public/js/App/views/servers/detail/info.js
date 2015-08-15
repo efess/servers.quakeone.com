@@ -35,41 +35,41 @@ var ServerDetailInfoView = Backbone.View.extend({
             return;
         }
 
-        var hourlyArray = this.getHourlyArray(hourlyList[0]);
+        var hourlyArray = this.getHourlyArray(hourlyList);
 
         var maxValue = _.max(hourlyArray, function (value) { return value[1];})[1];
 
-        $.plot($("#hourlyGraph"), [
-            {
-                data: hourlyArray,
-                lines: { show: true },
-                points: { show: true }
-            }],
-            {
-                grid: {
-                    borderWidth: 0
+        // $.plot($("#hourlyGraph"), [
+        //     {
+        //         data: hourlyArray,
+        //         lines: { show: true },
+        //         points: { show: true }
+        //     }],
+        //     {
+        //         grid: {
+        //             borderWidth: 0
 
-                },
-                yaxis: {
-                    show: false,
-                    max: maxValue > 30 ? maxValue : 30
-                },
-                xaxis: {
-                    show: true,
-                    tickSize: 1,
-                    min: 0,
-                    max: 24,
-                    tickFormatter: function (val, axis) {
-                        if (val == 0)
-                            return "12am";
-                        if (val == 6 || val == 18)
-                            return "6";
-                        if (val == 12)
-                            return "Noon";
-                        return '';
-                    }
-                }
-            });
+        //         },
+        //         yaxis: {
+        //             show: false,
+        //             max: maxValue > 30 ? maxValue : 30
+        //         },
+        //         xaxis: {
+        //             show: true,
+        //             tickSize: 1,
+        //             min: 0,
+        //             max: 24,
+        //             tickFormatter: function (val, axis) {
+        //                 if (val == 0)
+        //                     return "12am";
+        //                 if (val == 6 || val == 18)
+        //                     return "6";
+        //                 if (val == 12)
+        //                     return "Noon";
+        //                 return '';
+        //             }
+        //         }
+        //     });
     },
 getHourlyArray: function(jsonHourly){
     var withoutGmt = [

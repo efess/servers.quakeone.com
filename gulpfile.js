@@ -24,7 +24,7 @@ gulp.task('default', function () {
     //     .pipe(uglify())
     //     .on('error', gutil.log)
     // .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./dist/js/'));
+    .pipe(gulp.dest('./public/js/'));
 });
 
 // add custom browserify options here
@@ -52,7 +52,7 @@ function bundle() {
     // .pipe(uglify())
     //     .on('error', gutil.log)
     // .pipe(sourcemaps.write('./')) // writes .map file
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./public/js/'));
 }
 
 
