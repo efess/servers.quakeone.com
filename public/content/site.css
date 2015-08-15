@@ -1,0 +1,69 @@
+.centered
+{
+    text-align:center;
+}
+.link-row
+{
+    cursor: pointer; 
+    cursor: hand;
+}
+.component
+{
+    width: 100%;
+    margin-bottom: 20px;
+}
+#hourlyGraph
+{
+    width: 300px;
+    height:200px;
+}
+#mapPercentageChart
+{
+    height:500px;
+    width: 300px;
+}
+
+span.message.selected {
+    background: #972F2C;
+    color: #FFF;
+}
+
+.spinner {
+  margin: 100px auto;
+  width: 60px;
+  height: 60px;
+  position: relative;
+}
+
+.cube1, .cube2 {
+  background-color: #DDD;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  -webkit-animation: cubemove 1.8s infinite ease-in-out;
+  animation: cubemove 1.8s infinite ease-in-out;
+}
+
+.cube2 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+@-webkit-keyframes cubemove {
+  25% { -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5) }
+  50% { -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg) }
+  75% { -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
+  100% { -webkit-transform: rotate(-360deg) }
+}
+
+@keyframes cubemove {
+  25% { transform: translateX(42px) rotate(-90deg) scale(0.5) }
+  /* Hack to make IE and FF rotate in the right direction */
+  50% { transform: translateX(42px) translateY(42px) rotate(-179deg) }
+  50.1% { transform: translateX(42px) translateY(42px) rotate(-180deg) }
+  75% { transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
+  100% { transform: rotate(-360deg) }
+}
