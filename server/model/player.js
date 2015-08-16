@@ -67,7 +67,33 @@ var match = {
             
         return db.query('CALL spPlayerHourlySummery(?, ?, ?)', [playerId, dateFrom, dateTo])
             .then(r.compose(r.head, r.head));
-    }
+    },
+    getAliases: function(playerId, pageNumber, pageSize) {
+        var processRecord = function(record){
+            return {
+                AliasBase64: record.AliasBytes && record.AliasBytes.toString('base64'),
+                PlayerId: record.AliasPlayerId,
+                AliasName: record.Alias,
+                LastSeenAgo: record.LastSeenAgo
+            };
+        }
+        return function(playerId, pageNumber, pageSize){
+            return db.getPagedData('spPlayerAliasLookup', [playerId], pageNumber, pageSize, processRecord);
+        }
+    },
+    lookup: (function(){        
+        var processRecord = function(record){
+            return {
+                AliasBase64: record.AliasBytes && record.AliasBytes.toString('base64'),
+                PlayerId: record.PlayerId,
+                AliasName: record.Alias,
+                LastSeenAgo: record.LastSeenAgo
+            };
+        }
+        return function(gameId, playerPart, pageNumber, pageSize){
+            return db.getPagedData('spPlayerLookup', [gameId, playerPart], pageNumber, pageSize, processRecord);
+        }
+    }())
 };
 
 module.exports = match;

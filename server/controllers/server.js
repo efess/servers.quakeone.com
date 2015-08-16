@@ -37,8 +37,7 @@ router.get('/ranks/:serverId', function(req, res) {
     var responseObj = { serverdetail: {}};
     
     Promise.all([
-        server.getDetail(serverId).then(u.setProp('info',responseObj.serverdetail)),
-        server.getHourly(serverId).then(u.setProp('hourly',responseObj.serverdetail))
+        server.getPlayerRanks(serverId).then(u.setProp('ranks',responseObj.serverdetail))
     ])
         .then(r.always(responseObj))
         .then(response.sendWithFormat(api.json, res), response.sendError(res));
@@ -59,7 +58,7 @@ router.get('/stats/:serverId', function(req, res) {
     
     Promise.all([
         server.getMapStats(serverId, date).then(u.setProp('map', rObj.serverdetail.stats)),
-        server.getPlayerStats(serverId, date).then(u.setProp('playtime', rObj.serverdetail.stats))
+        server.getPlayerPlayTime(serverId, date).then(u.setProp('playtime', rObj.serverdetail.stats))
     ])
         .then(r.always(rObj))
         .then(response.sendWithFormat(api.json, res), response.sendError(res));

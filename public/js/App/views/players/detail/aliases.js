@@ -16,8 +16,6 @@ var PlayerDetailAliasesView = SupportsPagination.extend({
     template: _.template($('#player-detail-aliases').html()),
     isFetched: false,
     render: function (eventName) {
-        var matchRows = $('#playerMatchsRows');
-
         if (this.model.has('aliases')) {
             var modelData = $.extend(true, {}, this.model.toJSON());
             _.each(modelData.aliases, function (alias) {
@@ -31,7 +29,7 @@ var PlayerDetailAliasesView = SupportsPagination.extend({
             this.applyNameMaker();
         } else {
             $(this.el).html(this.template());
-            this.model.fetch({ data: { pageSize: self.pageCount, pageNumber: self.pageNumber }, type: 'POST' });
+            this.model.fetch({ data: { pageSize: self.pageCount, pageNumber: self.pageNumber }, type: 'GET' });
         }
 
         return this;

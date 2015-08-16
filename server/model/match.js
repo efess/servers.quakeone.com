@@ -5,30 +5,6 @@ var r = require('ramda');
 var xml = require('xml2js');
 var util = require('../helpers/util')
 
-var getPagedMatches = function(storedProc, id, recordOffset, recordCount, recordMap){
-    var payload = {
-        TotalRecords: 0,
-        Records: []
-    };
-    
-    return db.query('CALL ' + storedProc + 'Count(?)', id)
-        .then(r.compose(r.head,r.head))
-        .then(function(result){
-            payload.TotalRecords = result.RecordCount;
-            if(payload.TotalRecords) {
-                return db.query('CALL ' + storedProc + '(?, ?, ?)',[id, recordCount, recordOffset])
-                    .then(r.head)
-                    .then(function(results) {
-                        payload.Records = recordMap ? r.map(recordMap, results) : results;
-                        
-                        return payload;    
-                    });
-            } else {
-                return payload.TotalRecords;
-            }
-        });
-    
-};
 
 var match = {
     recentMatches: (function(){
@@ -96,7 +72,22 @@ var match = {
         };
     }()),
     getMatchByPlayer: function(playerId, recordOffset, recordCount) {
-        return getPagedMatches('spPlayerMatches', playerId, recordOffset, recordCount);
+        var matchMap = util.fieldMap({
+                "MatchId": "MatchId",
+				"ServerId": "ServerId",
+                "HostName": "HostName",
+                "Map": "Map",
+                "Mod": "Modification",
+                "JoinTime": "PlayerJoinTime",
+                "StayDuration": "PlayerStayDuration",
+                "MatchStart": "MatchStart",
+                "Skin": "Skin",
+                "Model": "Model",
+                "Frags": "Frags",
+                "PantColor": "PantColor",
+                "ShirtColor": "ShirtColor"
+        });
+        return db.getPagedData('spPlayerMatches', [playerId], recordOffset, recordCount, matchMap);
     },
     getMatchByServer: function(serverId, recordOffset, recordCount) {
         var matchMap = util.fieldMap({
@@ -109,7 +100,7 @@ var match = {
             "MatchDuration": "MatchDuration",
             "PlayerCount": "PlayerCount"
         });
-        return getPagedMatches('spServerMatches', serverId, recordOffset, recordCount, matchMap);
+        return db.getPagedData('spServerMatches', [serverId], recordOffset, recordCount, matchMap);
     }
 };
 

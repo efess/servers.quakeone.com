@@ -6,7 +6,7 @@ Backbone.$ = $;
 var Cacheable = require('./cacheable');
 
 var PlayerAliases = Cacheable.extend({
-    urlRoot: statics.serverRoot + '/api/player/alias',
+    urlRoot: statics.serverRoot + '/api/player/aliases',
     idAttribute: 'PlayerId',
 
     parse: function (data) {

@@ -24,29 +24,43 @@ var maps = {
     }
 }
 
-var processPlayerData = function(server) {
-    if(!server.PlayerData) {
+var processPlayerData = (function() {
+    var playerMap = util.fieldMap({
+        'PlayerId': 'PlayerId',
+        'Name': 'Name',
+        'NameBase64': 'NameBase64', 
+        'Score': 'CurrentFrags',
+        'TotalScore':'TotalFrags',
+        'CurrentFPM': 'FragsPerMinute',
+        'TotalPlayTime': 'UpTime',
+        'Skin': 'Skin',
+        'Model': 'Model',
+        'Shirt': 'Shirt',
+        'Pant': 'Pant'
+    });
+    return function(server) {
         server.CurrentPlayerCount = 0;
         server.Players = [];
-        return Promise.resolve(server);
-    } else {
-        return new Promise(function(resolve,reject) {
-            xmlParser.parseString(server.PlayerData, function(err, result) {
-                if(result) {
-                    if(result.Players){
-                        var players = result.Players.Player;
-                        server.Players = players;
-                        server.CurrentPlayerCount = players.length;
+        if(!server.PlayerData) {
+            return Promise.resolve(server);
+        } else {
+            return new Promise(function(resolve,reject) {
+                xmlParser.parseString(server.PlayerData, function(err, result) {
+                    if(result) {
+                        if(result.Players){
+                            var players = result.Players.Player;
+                            server.Players = r.map(playerMap, players);
+                            server.CurrentPlayerCount = players.length;
+                        }
+                        resolve(server);
+                    } else {
+                        reject(err);
                     }
-                    resolve(server);
-                } else {
-                    reject(err);
-                }
+                });
             });
-        });
+        }   
     }
-    
-}
+}());
 
 // Yes.. Mutates state.
 var mapFieldValue = r.curry(function(fieldName, server) { 
@@ -98,7 +112,7 @@ var server = {
             return function(date, numDays){
                 var newDate = new Date(date.getTime() + (dayMs * numDays));
                 return util.formatDate(newDate);
-            }
+            };
         }());
         
         var today = new Date(),
@@ -138,7 +152,7 @@ var server = {
             return r.cond([
                 [r.isNil,   r.always(Promise.resolve({}))],
                 [r.T,       fn]]);
-        }
+        };
             
         return db.query('SELECT * FROM vServerDetail WHERE ServerId = ?', [serverId])
             .then(r.compose(maybeEmpty(processServer), r.head));
@@ -150,22 +164,36 @@ var server = {
                 Position: index,
                 Map: record.Map,
 				Percentage: record.Percentage
-            }  
+            };
         };
         return db.query('CALL spServerStatsMapPercentage(?, ?)', [date, serverId])
             .then(r.compose(util.mapIndexed(processRecord), r.head));
     },
-    getPlayerStats: function(serverId, date){
+    getPlayerPlayTime: function(serverId, date){
         var processRecord = function(record, index) {
             return {
                 Position: index,
                 PlayTime: record.TimeSpent,
 				PlayerId: record.PlayerId,
 				AliasBase64: record.AliasBytes && record.AliasBytes.toString('base64')
-            }  
+            };  
         };
         
         return db.query('CALL spServerPlayerWeeklyPlayTime(?, ?)', [date, serverId])
+            .then(r.compose(util.mapIndexed(processRecord), r.head));
+    },
+    getPlayerRanks: function(serverId, date){
+        var processRecord = function(record, index) {
+            return {
+                Position: index,
+                MatchId: record.MatchId,
+				PlayerId: record.PlayerId,
+				FPM: record.FPM,
+				AliasBase64: record.AliasBytes && record.AliasBytes.toString('base64')
+            };
+        };
+        
+        return db.query('CALL spServerPlayerWeeklyRanking(?, ?)', [date, serverId])
             .then(r.compose(util.mapIndexed(processRecord), r.head));
     },
     allDefinitions: function() {
@@ -175,7 +203,31 @@ var server = {
         return db.query('SELECT * FROM GameServer WHERE ServerId = ?', [id]);
     },
     setDefinition: function(server){
-        return db.query('CALL spAddUpdateGameServer(?)', server);
+        var createTokenString = function(length){
+            return r.map(r.always('?'), new Array(length)).join(', ');
+        };
+        var updateParamKeys = [
+            'ServerId',
+            'GameId',
+            'CustomName',
+            'AntiWallHack',
+            'Port',
+            'DNS',
+            'PublicSiteUrl',
+            'MapDownloadUrl',
+            'Location',
+            'QueryInterval',
+            'Region',
+            '----JustDoNull',
+            'CustomNameShort',
+            'ModificationCode',
+            'Category',
+            'Active',
+            'CustomModificationName'
+        ];
+        
+        var updateParams = r.map(function(key){return server[key] || null; }, updateParamKeys);
+        return db.query('CALL spAddUpdateGameServer(' + createTokenString(updateParamKeys) +')', updateParams);
     },
     deleteDefinition: function(id) {
         return db.query('CALL spRemoveGameServer(?)', [id]);

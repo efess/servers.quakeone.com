@@ -55,6 +55,10 @@ var util = {
     }),
     formatDate: function(date) {
         return [date.getFullYear(), date.getMonth(), date.getMonth()].join('-');
+    }, 
+    intInRange: function(value, min, max) {
+        var val = parseInt(value);
+        return val && Math.min(Math.max(val, min), max)
     }
 }
     
