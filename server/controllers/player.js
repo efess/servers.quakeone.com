@@ -23,8 +23,8 @@ router.get('/detail/:playerId', function(req, res) {
 
 router.get('/match/:playerId', function(req, res) {
     var playerId = (req.params.playerId && parseInt(req.params.playerId)),
-        pageSize = u.intInRange(req.body.pageSize, 1, 50) || 10,
-        pageNumber = u.intInRange(req.body.pageNumber, 0, 99999) || 0;
+        pageSize = u.intInRange(req.query.pageSize, 1, 50) || 10,
+        pageNumber = u.intInRange(req.query.pageNumber, 0, 99999) || 0;
             
     var responseData = {
         playerdetail: {}
@@ -37,8 +37,8 @@ router.get('/match/:playerId', function(req, res) {
 
 router.get('/aliases/:playerId', function(req, res) {
     var playerId = (req.params.playerId && parseInt(req.params.playerId)),
-        pageSize = u.intInRange(req.body.pageSize, 1, 50) || 10,
-        pageNumber = u.intInRange(req.body.pageNumber, 0, 99999) || 0;
+        pageSize = u.intInRange(req.query.pageSize, 1, 50) || 10,
+        pageNumber = u.intInRange(req.query.pageNumber, 0, 99999) || 0;
             
     var responseObj = {};
     

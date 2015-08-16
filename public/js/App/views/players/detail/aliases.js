@@ -13,6 +13,7 @@ var PlayerDetailAliasesView = SupportsPagination.extend({
         }
         this.model.on('change', this.render, this);
     },
+    method: 'GET',
     template: _.template($('#player-detail-aliases').html()),
     isFetched: false,
     render: function (eventName) {

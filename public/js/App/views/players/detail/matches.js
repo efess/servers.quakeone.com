@@ -15,6 +15,7 @@ var PlayerDetailMatchesView = SupportsPagination.extend({
     events: {
         'click tr': 'viewMatch',
     },
+    method: 'GET',
     templateMatches: _.template($('#player-detail-matches').html()),
     templateMatch: _.template($('#player-detail-match').html()),
     isFetched: false,

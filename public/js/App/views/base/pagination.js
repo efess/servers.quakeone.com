@@ -6,6 +6,7 @@ Backbone.$ = $;
 var SupportsPagination = Backbone.View.extend({
     pageNumber: 0,
     pageCount: 10,
+    method: 'POST',
     getPaginator: function () {
         var self = this;
         var total = 0;
@@ -64,7 +65,7 @@ var SupportsPagination = Backbone.View.extend({
                 pageSize: self.pageCount,
                 pageNumber: self.pageNumber
             })
-            , type: 'POST'
+            , type: self.method
         });
     }
     ,  nextPage: function () {
@@ -75,7 +76,7 @@ var SupportsPagination = Backbone.View.extend({
                 pageSize: self.pageCount,
                 pageNumber: self.pageNumber
             })
-            , type: 'POST'
+            , type: self.method
         });
         return false;
     },
@@ -87,7 +88,7 @@ var SupportsPagination = Backbone.View.extend({
                 pageSize: self.pageCount,
                 pageNumber: self.pageNumber
             })
-            , type: 'POST'
+            , type: self.method
         });
         return false;
     },
@@ -98,7 +99,7 @@ var SupportsPagination = Backbone.View.extend({
                 pageSize: self.pageCount, 
                 pageNumber: self.pageNumber
             })
-            , type: 'POST'
+            , type: self.method
         });
 
         return false;

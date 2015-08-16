@@ -78,7 +78,7 @@ var sortServers = function(servers) {
 }
 
 var server = {
-	allStatus: function() {
+	getStatusByGame: function(gameId) {
         var fieldMap = util.fieldMap({
             'DNS': 'DNS',
             'IPAddress': 'IpAddress',
@@ -97,6 +97,7 @@ var server = {
             'ServerId': 'ServerId'
         });
         
+        // cache entire set
         return cache.cacheableFn(function(){ 
             return db.query('SELECT * FROM vServerDetail')
                 .then(r.compose(Promise.all, r.map(processPlayerData)))
@@ -104,7 +105,8 @@ var server = {
                 .then(r.map(r.compose(mapFieldValue('Status'), fieldMap)));
             },
             'serverStatus',
-            30000);
+            30000)
+            .then(r.filter(r.propEq('GameId', gameId)))
 	},
     getHourly: function(serverId){
         var dateAddDays = (function () {

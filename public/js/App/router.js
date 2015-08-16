@@ -7,7 +7,6 @@ var ServerDetailView = require('./views/servers/detail');
 var PlayerDetailView = require('./views/players/detail');
 var HomeView = require('./views/home/home');
 var MatchDetailView = require('./views/matches/detail');
-var ServerList = require('./models/serverlist');
 var ServerDetails = require('./models/serverdetail');
 var PlayerDetails = require('./models/playerdetail');
 var Match = require('./models/match');
@@ -22,7 +21,7 @@ var AppRouter = Backbone.Router.extend({
 
 
         this.homeView = new HomeView({ el: $('#content') });
-        this.serverListView = new ServerListView({ model: new ServerList(), el: $('#content') });
+        this.serverListView = new ServerListView({ el: $('#content') });
         this.navBar = new NavBar({ el: $('#sidebar') }).render();
        
         $(document).on('click', 'a:not(.data-bypass)', function (evt) {

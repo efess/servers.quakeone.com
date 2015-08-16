@@ -4,6 +4,7 @@ var Backbone = require('backbone');
 Backbone.$ = $;
 var Static = require('../../modules/static');
 var DateTime = require('../../modules/datetime');
+var ServerList = require('../../models/serverlist');
 
 
 
@@ -12,7 +13,6 @@ var ServerListView = Backbone.View.extend({
     tagName: 'table',
     timerIntervalId: 0,
     initialize: function () {
-        this.model.on('change', this.render, this);
         //this.listenTo(this.model, "change", this.render);
     },
     startRefresh: function () {
@@ -35,7 +35,8 @@ var ServerListView = Backbone.View.extend({
         //this.render();
     },
     refresh: function () {
-        this.model.id = this.id;
+        this.model = new ServerList({ id: this.id });
+        this.model.on('change', this.render, this);
         this.model.fetch();
     },
     template: _.template($('#server-list').html()),

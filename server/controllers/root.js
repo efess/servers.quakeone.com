@@ -13,7 +13,7 @@ var formatBeforeTransform =  r.curry(function(format, servers){
     return servers;
 });
 
-router.get('/', function(req, res) {
+router.get('*', function(req, res) {
     if(req.query.format){
         var formatter = apiFormat[req.query.format];
         if(formatter) {
@@ -28,8 +28,8 @@ router.get('/', function(req, res) {
             res.send('Invalid format.');
         }
     } else {
-
-        res.sendFile(path.join(__dirname, '../../public', 'index.html'));
+        res.set('Content-Type', 'text/html');
+        res.sendFile(path.join(__dirname, '../../public', 'index'));
     }
 });
 

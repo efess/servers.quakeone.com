@@ -14,6 +14,7 @@ var ServerDetailMatchesView = SupportsPagination.extend({
         }
         this.model.on('change', this.render, this);
     },
+    method: 'GET',
     events: {
         'click tr': 'viewMatch',
     },

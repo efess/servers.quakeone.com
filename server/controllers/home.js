@@ -9,20 +9,17 @@ var express = require('express'),
     resHelper = require('../helpers/response');
 
 router.get('/summary/:gameId', function(req, res) {
-    var gameId = req.params.gameId;
+    var gameId = req.params.gameId && parseInt(req.params.gameId) || 0;
     var response = {
         homedata: {
                 recentmatches: [],
                 servers: []
             }
-        }, 
-        setProp = r.curry(function (prop, objInstance, value) { 
-            objInstance[prop] = value
-        });
+        };
 
     Promise.all([
-            match.recentMatches(gameId).then(setProp('recentmatches', response.homedata)),
-            server.allStatus().then(setProp('servers', response.homedata))
+            match.recentMatches(gameId).then(util.setProp('recentmatches', response.homedata)),
+            server.getStatusByGame(gameId).then(util.setProp('servers', response.homedata))
         ])
         .then(r.always(response))
         .then(resHelper.sendWithFormat(apiFormat.json, res), resHelper.sendError);
