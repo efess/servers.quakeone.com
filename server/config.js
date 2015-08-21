@@ -22,8 +22,10 @@ var config = {
         server: 'server',
         hostname: 'localhost'
     },
+    sessionSecret: 'your cat',
     publicDir: 'public/',
-    listenPort: 8080
+    listenPort: 8080,
+    sessionPath: './sessions'
 }
 
 module.exports = config;

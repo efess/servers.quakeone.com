@@ -1,16 +1,46 @@
 var express = require('express'),
     router = express.Router(),
+    user = require('../model/user'),
     server = require('../model/server'),
     path = require('path'),
     r = require('ramda'),
     apiFormat = require('../helpers/apiFormat');
-  // , auth = require('../middlewares/auth')
 
 var formatBeforeTransform =  r.curry(function(format, servers){
     if(format === 'json'){
         return {Servers: servers};
     }
     return servers;
+});
+
+router.get('/login', function(req, res) {
+    if(req.session && req.session.user){
+        res.redirect('/manage');
+    }
+    res.sendFile(path.join(__dirname, '../../html', 'login.html'));
+});
+
+router.post('/login', function(req, res) {
+    var username = req.body.username || '',
+        password = req.body.password || '';
+    
+    user.getUser(username, password)
+        .then(function(result) {
+           if(result && result.length){
+                req.session.user = username;
+                res.redirect('/manage');
+           } else {
+                res.send('Invalid login');
+           }
+        });
+   
+});
+
+router.post('/logout', function(req, res) {
+    if(req.session && req.session.user){
+        delete req.session.user;
+    }
+    res.redirect('/');
 });
 
 router.get('*', function(req, res) {
@@ -28,8 +58,7 @@ router.get('*', function(req, res) {
             res.send('Invalid format.');
         }
     } else {
-        res.set('Content-Type', 'text/html');
-        res.sendFile(path.join(__dirname, '../../public', 'index'));
+        res.sendFile(path.join(__dirname, '../../html', 'index.html'));
     }
 });
 

@@ -6,14 +6,15 @@
   "scripts": {},
   "author": "Joe Lukacovic",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/efess/servers.quakeone.com"
+    "type": "git",
+    "url": "https://github.com/efess/servers.quakeone.com"
   },
   "dependencies": {
     "backbone": "^1.2.1",
     "body-parser": "^1.13.3",
     "bootstrap": "^3.3.5",
     "express": "^4.13.1",
+    "express-session": "^1.11.3",
     "extend": "^3.0.0",
     "jquery": "^2.1.4",
     "jquery-flot": "^0.8.3",
@@ -22,6 +23,7 @@
     "path": "^0.11.14",
     "promise": "^7.0.4",
     "ramda": "^0.17.1",
+    "session-file-store": "0.0.18",
     "underscore": "^1.8.3",
     "xml2js": "^0.4.10"
   },
