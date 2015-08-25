@@ -39,9 +39,6 @@ var NavBar = Backbone.View.extend({
     links: [{
         href: "http://www.quakeone.com/",
         name: "QuakeOne.com"
-    }, {
-        href: "http://www.pentstools.com/",
-        name: "pentstools.com"
     }],
     dropDown: _.template($('#navdropdown').html()),
     render: function (eventName) {

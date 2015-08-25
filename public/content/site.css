@@ -67,3 +67,19 @@ span.message.selected {
   75% { transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
   100% { transform: rotate(-360deg) }
 }
+
+.form-control {
+    height: 24px;
+    padding: 3px 12px;
+}
+.btn {
+    padding: 1px 12px;
+}
+
+.update-server-row{
+    font-size: 12px;
+    
+}
+.update-server-row > td {
+    padding: 4px !important;
+}

@@ -202,9 +202,13 @@ var server = {
         return db.query('SELECT * FROM GameServer');
     },
     getDefinition: function(id) {
-        return db.query('SELECT * FROM GameServer WHERE ServerId = ?', [id]);
+        return db.query('SELECT * FROM GameServer WHERE ServerId = ?', [id])
+            .then(r.head);
     },
     setDefinition: function(server){
+        if(!server.ServerId) {
+            server.ServerId = -1; // Insert
+        }
         var createTokenString = function(length){
             return r.map(r.always('?'), new Array(length)).join(', ');
         };
@@ -228,12 +232,17 @@ var server = {
             'CustomModificationName'
         ];
         
-        var updateParams = r.map(function(key){return server[key] || null; }, updateParamKeys);
-        return db.query('CALL spAddUpdateGameServer(' + createTokenString(updateParamKeys) +')', updateParams);
+        var updateParams = r.map(function(key){
+            return server[key] || null; 
+        }, updateParamKeys);
+        
+        return db.query('CALL spAddUpdateGameServer(' + createTokenString(updateParamKeys.length) +')', updateParams);
     },
     deleteDefinition: function(id) {
         return db.query('CALL spRemoveGameServer(?)', [id]);
     }
+    
+    
     
     // update_server_definition($server_definitions){
         

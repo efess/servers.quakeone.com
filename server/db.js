@@ -57,6 +57,27 @@ var db = {
                 }
             });
         
+    },
+    registerSequelize:  function(sequelize, DataTypes) {
+        sequelize.define('WebSession', {
+            sid: {
+                type: DataTypes.STRING,
+                primaryKey: true
+            }, 
+            expires: {
+                type: DataTypes.DATE,
+                allowNull: true
+            }, 
+            data: DataTypes.TEXT,
+            createdAt: {
+                type: DataTypes.DATE,
+                allowNull: true
+            }, 
+            updatedAt: {
+                type: DataTypes.DATE,
+                allowNull: true
+            }
+        }, { tableName: 'WebSession' });
     }
 }
 

@@ -2,6 +2,9 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 Backbone.$ = $;
+var Manage = require('./views/manage/manage');
+var ServerUpdate = require('./models/serverDefinition');
+var ServerUpdateView = require('./views/manage/update');
 var ServerListView = require('./views/servers/list');
 var ServerDetailView = require('./views/servers/detail');
 var PlayerDetailView = require('./views/players/detail');
@@ -19,13 +22,11 @@ var AppRouter = Backbone.Router.extend({
     initialize: function () {
         var self = this;
 
-
         this.homeView = new HomeView({ el: $('#content') });
         this.serverListView = new ServerListView({ el: $('#content') });
         this.navBar = new NavBar({ el: $('#sidebar') }).render();
        
         $(document).on('click', 'a:not(.data-bypass)', function (evt) {
-
             var href = $(this).attr('href');
             var protocol = this.protocol + '//';
 
@@ -55,6 +56,9 @@ var AppRouter = Backbone.Router.extend({
         "matches/:id": "matchDetails",
         "playersearch": "playerSearch",
         "playersearch/:id": "playerSearch",
+        "manage": "manage",
+        "manage/update/:id": "manageUpdateDefinition",
+        "manage/copy/:id": "manageCopyDefinition",
         "*actions": 'home'
     },
     home: function (id) {
@@ -115,7 +119,28 @@ var AppRouter = Backbone.Router.extend({
             model: new Match({ MatchId: id }),
             el: $('#content')
         }).render();
-    }
+    },
+    manage: function(){
+        this.serverListView.stopRefresh();
+        new Manage({
+            el: $('#content')
+        }).render();
+    },
+    manageUpdateDefinition: function(id) {
+        this.serverListView.stopRefresh();
+        new ServerUpdateView({
+            model: new ServerUpdate({ServerId: id}),
+            el: $('#content')
+        });
+    },
+    manageCopyDefinition: function(id) {
+        this.serverListView.stopRefresh();
+        new ServerUpdateView({
+            model: new ServerUpdate({ServerId: id}),
+            el: $('#content'),
+            copy: true
+        });
+    },
 });
 
 var initialize = function () {

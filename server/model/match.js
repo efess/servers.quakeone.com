@@ -73,19 +73,19 @@ var match = {
     }()),
     getMatchByPlayer: function(playerId, recordOffset, recordCount) {
         var matchMap = util.fieldMap({
-                "MatchId": "MatchId",
-				"ServerId": "ServerId",
-                "HostName": "HostName",
-                "Map": "Map",
-                "Mod": "Modification",
-                "JoinTime": "PlayerJoinTime",
-                "StayDuration": "PlayerStayDuration",
-                "MatchStart": "MatchStart",
-                "Skin": "Skin",
-                "Model": "Model",
-                "Frags": "Frags",
-                "PantColor": "PantColor",
-                "ShirtColor": "ShirtColor"
+            "MatchId": "MatchId",
+            "ServerId": "ServerId",
+            "HostName": "HostName",
+            "Map": "Map",
+            "Mod": "Modification",
+            "JoinTime": "PlayerJoinTime",
+            "StayDuration": "PlayerStayDuration",
+            "MatchStart": "MatchStart",
+            "Skin": "Skin",
+            "Model": "Model",
+            "Frags": "Frags",
+            "PantColor": "PantColor",
+            "ShirtColor": "ShirtColor"
         });
         return db.getPagedData('spPlayerMatches', [playerId], recordOffset, recordCount, matchMap);
     },

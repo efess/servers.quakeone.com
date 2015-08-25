@@ -679,6 +679,138 @@
         </table>
         <div id="paginator"></div>
     </script>
+
+    <script type="text/template" id="manage-servers">
+
+        <div id="manageServerList"></div>
+    </script>
+
+    <script type="text/template" id="manage-servers-list">
+        <table class="table">
+            <thead>
+                <th>ServerId</th>
+                <th>Game</th>
+                <th>Name</th>
+                <th>DNS</th>
+                <th>Port</th>
+                <th>Freq</th>
+                <th>Mod</th>
+                <th>Region</th>
+                <th>Status</th>
+            </thead>
+            <tbody  id="manageServersBody">
+
+            </tbody>
+        </table>
+        <div class="modal fade" id="confirm-remove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Confirm server removal
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to remove server <span id="confirm-server-id"></span>?
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-danger btn-ok data-bypass">OK</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/template" id="manage-servers-list-row">
+        <tr class="update-server-row">
+            <td><%= ServerId %></td>
+            <td><%= Game %></td>
+            <td><%= CustomName %></td>
+            <td><%= DNS %></td>
+            <td><%= Port %></td>
+            <td><%= QueryInterval %></td>
+            <td><%= ModificationCode %></td>
+            <td><%= Region %></td>
+            <td><%= Status %></td>
+            <td>
+                <a href="manage/update/<%= ServerId %>" sid="<%= ServerId %>" class="edit-server">edit</a> | 
+                <a href="manage/copy/<%= ServerId %>" sid="<%= ServerId %>" class="copy-server">copy</a> | 
+                <a href="#" sid="<%= ServerId %>" class="remove-server data-bypass" data-toggle="modal" data-target="#confirm-remove">remove</a>
+            </td>
+        </tr>
+    </script>
+    <script type="text/template" id="manage-servers-add-update">
+        <div>
+            
+        </div>
+        <form id="updateForm">
+            <table class="table">
+                <thead>
+                </thead>
+                <tbody id="serverInfo">
+                    <tr>
+                        <td></td>
+                        <td></td>
+    
+                        <td>Game Type</td>
+                        <td><select name="GameId" id="upGameType" class="form-control"  value="<%= GameId %>"></select></td>
+                    </tr>
+    
+                    <tr>
+                        <td>Host/IP</td>
+                        <td><input name="DNS" type="text" class="form-control"  id="upHost" value="<%= DNS %>"></input></td>
+    
+                        <td>Port</td>
+                        <td><input name="Port" type="text" class="form-control"  id="upPort" value="<%= Port %>"></input></td>
+                    </tr>
+    
+                    <tr>
+                        <td>Custom Name</td>
+                        <td><input name="CustomName" type="text" class="form-control"  id="upCustomName" value="<%= CustomName %>"></input></td>
+    
+                        <td>Custom Name Short</td>
+                        <td><input name="CustomNameShort" type="text" class="form-control"  id="upCustomNameShort" value="<%= CustomNameShort %>"></input></td>
+                    </tr>
+    
+                    <tr>
+                        <td>Query Interval</td>
+                        <td><input name="QueryInterval" type="text" class="form-control"  id="upQueryInterval" value="<%= QueryInterval %>"></input></td>
+    
+                        <td>Active</td>
+                        <td><input name="Active" type="text" class="form-control"  id="upActive" value="<%= Active %>"></input></td>
+                    </tr>
+    
+                    <tr>
+                        <td>Public Site URL</td>
+                        <td colspan="3"><input name="PublicSiteUrl" type="text" class="form-control" id="upPublicSiteUrl" value="<%= PublicSiteUrl %>"></input></td>
+    
+                    </tr>
+    
+                    <tr>
+                        <td>Map Download Url</td>
+                        <td colspan="3"><input name="MapDownloadUrl" type="text" class="form-control" id="upMapDownloadUrl" value="<%= MapDownloadUrl %>"></input></td>
+                    </tr>
+    
+                    <tr>
+                        <td>Region</td>
+                        <td><select name="Region" id="upRegion" class="form-control"  selected="<%= Region %>"></select></td>
+    
+                        <td>Location</td>
+                        <td><input name="Location" type="text" class="form-control"  id="upLocation" value="<%= Location %>"></input></td>
+                    </tr>
+    
+                    <tr>
+                        <td>Custom Mod name</td>
+                        <td><input name="Modification" type="text" class="form-control"  id="upCustomMod" value="<%= Modification %>"></input></td>
+    
+                        <td>Modification Code</td>
+                        <td><input name="ModificationCode" type="text" class="form-control"  id="upModCode" value="<%= ModificationCode %>"></input></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <p>
+        <a href="#" id="serverUpdate" class="data-bypass">Update</a> | <a href="/manage" id="cancelUpdate">Done</a>
+        <span id="update-result"></span>      
+    </script>
     <script type="text/javascript" src="/js/main.js"></script>
 </body>
 </html>
