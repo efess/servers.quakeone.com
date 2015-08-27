@@ -47,15 +47,23 @@ var util = {
         // fn(value, index)
         var idx = 0;
         return r.map(function(value) {
-                fn(value, idx++);
-            }, array);
+            return fn(value, idx++);
+        }, array);
     }),
     setProp: r.curry(function (prop, objInstance, value) { 
         objInstance[prop] = value;
     }),
     formatDate: function(date) {
-        return [date.getFullYear(), date.getMonth(), date.getMonth()].join('-');
+        var month = (date.getMonth()+1).toString(),
+            day = date.getDate().toString();
+        return [date.getFullYear(), month.length === 2 ? month : "0" + month, day.length === 2 ? day : "0" + day].join('-');
     }, 
+    dateAddDays: (function () {
+        var dayMs = 86400000;
+        return function(date, numDays){
+            return new Date(date.getTime() + (dayMs * numDays));
+        };
+    }()),
     intInRange: function(value, min, max) {
         var val = parseInt(value);
         return val && Math.min(Math.max(val, min), max)

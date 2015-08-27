@@ -109,17 +109,9 @@ var server = {
             .then(r.filter(r.propEq('GameId', gameId)))
 	},
     getHourly: function(serverId){
-        var dateAddDays = (function () {
-            var dayMs = 86400000;
-            return function(date, numDays){
-                var newDate = new Date(date.getTime() + (dayMs * numDays));
-                return util.formatDate(newDate);
-            };
-        }());
-        
         var today = new Date(),
-            dateFrom = dateAddDays(today, -30),
-            dateTo = dateAddDays(today, 1);
+            dateFrom = util.formatDate(util.dateAddDays(today, -40)),
+            dateTo = util.formatDate(util.dateAddDays(today, 1));
             
         return db.query("CALL spServerHourlySummery(?, ?, ?)", [serverId, dateFrom, dateTo])
             .then(r.compose(r.head, r.head));

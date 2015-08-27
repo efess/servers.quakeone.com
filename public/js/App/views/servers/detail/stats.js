@@ -6,6 +6,8 @@ var Static = require('../../../modules/static');
 var DateTime = require('../../../modules/datetime');
 
 var Chart = require('../../../../../lib/chart.js');
+window.Chart = Chart;
+var HorizontalBar = require('../../../../../lib/chart.horizontalbar.js');
 //flotValueLabels: "../Libs/jquery.flot.valuelabels"
 
 var ServerDetailStatsView = Backbone.View.extend({
@@ -41,27 +43,37 @@ var ServerDetailStatsView = Backbone.View.extend({
             return;
         }
         if (mapPercentages.length < 10) {
-
             $('#mapPercentageChart').height(mapPercentages.length == 1
                 ? 120 :
                 500 * (mapPercentages.length / 10) + 15)
         }
         
         var percentageArray = [];
-        var ticks = [];
-        $.each(mapPercentages,
-            function (idx, row) {
-                var rev = mapPercentages.length - row.Position;
-                ticks[rev] = row.Map;
-                percentageArray.push(
-                    [
-                        parseFloat(row.Percentage),
-                        rev
-                    ]);
-            });
+        var labels = [];
+        for(var i = mapPercentages.length - 1; i >= 0; i--){
+            labels.push(mapPercentages[i].Map);
+            percentageArray.push(parseFloat(mapPercentages[i].Percentage));
+        }
 
         var maxValue = _.max(percentageArray, function (value) { return value[0]; })[0];
-
+        var data = {
+            labels: labels,
+            datasets: [
+                {
+                    fillColor: "rgba(255,204,51,0.5)",
+                    strokeColor: "rgba(255,204,51,0.8)",
+                    highlightFill: "rgba(255,204,51,0.75)",
+                    highlightStroke: "rgba(255,204,51,1)",
+                    data: percentageArray
+                }
+            ]
+        };
+        
+        
+        var myBarChart = new Chart(
+            document.getElementById("mapPercentageChart").getContext("2d")
+        ).HorizontalBar(data, {});
+        
         // $.plot($("#mapPercentageChart"), [
         //     {
         //         data: percentageArray,

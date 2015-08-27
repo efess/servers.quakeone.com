@@ -62,8 +62,9 @@ var match = {
         };
     }()),
     getPlayerHourly: function(playerId) {
-        var dateFrom = '2013-01-01 12:00AM',
-            dateTo = '2013-12-30 11:59PM';
+        var today = new Date(),
+            dateFrom = util.formatDate(util.dateAddDays(today, -40)),
+            dateTo = util.formatDate(util.dateAddDays(today, 1));
             
         return db.query('CALL spPlayerHourlySummery(?, ?, ?)', [playerId, dateFrom, dateTo])
             .then(r.compose(r.head, r.head));

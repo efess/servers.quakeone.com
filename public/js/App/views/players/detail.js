@@ -83,75 +83,51 @@ var PlayerDetailView = Backbone.View.extend({
         }
 
         var hourlyArray = this.getHourlyArray(hourlyList);
-        var maxValue = _.max(hourlyArray, function (value) { return value[1]; })[1];
 
-        // $.plot($("#hourlyGraph"), [
-        //     {
-        //         data: hourlyArray,
-        //         lines: { show: true },
-        //         points: { show: true }
-        //     }],
-        //     {
-        //         grid: {
-        //             borderWidth: 0
-        //         },
-        //         yaxis: {
-        //             show: false,
-        //             max: maxValue > 30 ? maxValue : 30
-        //         },
-        //         xaxis: {
-        //             show: true,
-        //             tickSize: 1,
-        //             min: 0,
-        //             max: 24,
-        //             tickFormatter: function (val, axis) {
-        //                 if (val == 0)
-        //                     return "12am";
-        //                 if (val == 6 || val == 18)
-        //                     return "6";
-        //                 if (val == 12)
-        //                     return "Noon";
-        //                 return '';
-        //             }
-        //         }
-        //     });
+        var maxValue = _.max(hourlyArray, function (value) { return value[1];})[1];
+        var labels = _.map(hourlyArray, function(elem, idx) {
+            if (idx == 0)
+                return "12am";
+            if (idx == 6 || idx == 18)
+                return "6";
+            if (idx == 12)
+                return "Noon";
+            return '';
+        });
+        var data = {
+            labels: labels,
+            datasets: [ {
+                fillColor: "rgba(255,204,51,0.2)",
+                strokeColor: "rgba(255,204,51,1)",
+                pointColor: "rgba(255,204,51,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(255,204,51,1)",
+                data: hourlyArray
+            }]
+        };
+        
+        new Chart(
+            document.getElementById("hourlyGraph").getContext("2d")
+        ).Line(data, {
+            scaleShowHorizontalLines: false,
+            showTooltips: false,
+            scaleShowLabels: false
+        });
     },
     getHourlyArray: function(jsonHourly){
-        var withoutGmt = [
-            parseInt(jsonHourly.hour0),
-            parseInt(jsonHourly.hour1),
-            parseInt(jsonHourly.hour2),
-            parseInt(jsonHourly.hour3),
-            parseInt(jsonHourly.hour4),
-            parseInt(jsonHourly.hour5),
-            parseInt(jsonHourly.hour6),
-            parseInt(jsonHourly.hour7),
-            parseInt(jsonHourly.hour8),
-            parseInt(jsonHourly.hour9),
-            parseInt(jsonHourly.hour10),
-            parseInt(jsonHourly.hour11),
-            parseInt(jsonHourly.hour12),
-            parseInt(jsonHourly.hour13),
-            parseInt(jsonHourly.hour14),
-            parseInt(jsonHourly.hour15),
-            parseInt(jsonHourly.hour16),
-            parseInt(jsonHourly.hour17),
-            parseInt(jsonHourly.hour18),
-            parseInt(jsonHourly.hour19),
-            parseInt(jsonHourly.hour20),
-            parseInt(jsonHourly.hour21),
-            parseInt(jsonHourly.hour22),
-            parseInt(jsonHourly.hour23)
-        ];      
-        var withGmt = [];
+        var withoutGmt = [];
         var i, j;
+        for(i = 0; i < 24; i++) {
+            withoutGmt[i] = parseInt(jsonHourly['hour' + i.toString()]);
+        }
+        var withGmt = [];
         for(i = 0, j = new Date().getTimezoneOffset() /60; i < 24; i++, j++){
             if(j === 24) j = 0;
-            withGmt[i] = [i,withoutGmt[j]];
+            withGmt[i] = withoutGmt[j];
         }
         return withGmt;
     }
-
 });
 
 module.exports = PlayerDetailView;

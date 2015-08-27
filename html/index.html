@@ -301,7 +301,8 @@
                     </tbody>
                 </table>
                 <strong>Time active</strong>
-                <div id="hourlyGraph"></div>
+                <canvas id="hourlyGraph"></canvas>
+                <!--<div id="hourlyGraph"></div>-->
             </div>
             <div class="col-sm-7" id="serverMatches">
             </div>
@@ -437,7 +438,7 @@
         </table>
         <strong>Maps for the last 30 days</strong>
         <% if(typeof stats != 'undefined') { %>
-        <div id="mapPercentageChart"></div>
+        <canvas id="mapPercentageChart"></canvas>
         <% } else { %>
         <div class="spinner"><div class="cube1"></div><div class="cube2"></div></div>
         <% } %>
@@ -582,7 +583,7 @@
                 </tbody>
             </table>
             <strong>Time active</strong>
-            <div id="hourlyGraph" class="component"></div>
+            <canvas id="hourlyGraph"></canvas>
             <div id="playerAliases"></div>
         </div>
 

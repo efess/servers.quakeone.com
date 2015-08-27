@@ -45,7 +45,7 @@ router.get('/ranks/:serverId', function(req, res) {
 
 router.get('/stats/:serverId', function(req, res) {
     var serverId = (req.params.serverId && parseInt(req.params.serverId)) || 0;
-    var date = u.formatDate(new Date());
+    var date = u.formatDate(u.dateAddDays(new Date(), -30)); 
     var rObj = { 
         serverdetail: {
             stats: {
