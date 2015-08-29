@@ -7,6 +7,7 @@ router.use('/api/player', require('./player'));
 router.use('/api/match', require('./match'));
 router.use('/manage', require('./manage'));
 router.use('/', require('./root'));
+router.use('/chat', require('../chat/chatServer'));
 
 
 

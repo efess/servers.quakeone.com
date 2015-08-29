@@ -1,10 +1,11 @@
 ﻿var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
+var statics = require('../modules/static.js')
 Backbone.$ = $;
 
 var Chat = Backbone.Model.extend({
-    urlRoot: 'http://servers.quakeone.com/stats/Chat',
+    urlRoot: statics.serverRoot + '/chat',
     parse: function (data) {
         return data;
     }

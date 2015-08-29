@@ -29,7 +29,8 @@ var config = {
     sessionSecret: 'your cat',
     publicDir: 'public/',
     listenPort: 8080,
-    sessionPath: './sessions'
+    sessionPath: './sessions',
+    chatRoom: 'QSBChat'
 }
 
 module.exports = config;

@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser')
 var config = require('./config');
 var session = require('express-session');
 var db = require('./db');
-
+var chat = require('./chat/chat')
 config.load().then(startServer);
 
 function startServer(){
@@ -28,21 +28,30 @@ function startServer(){
     db.registerSequelize(sequelize, Sequelize);
     
     app.use(session({
-    secret: config.sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    store: new SequelizeStore({
-        db: sequelize, 
-        table: 'WebSession',
-        checkExpirationInterval: 24 * 60 * 60 * 1000,
-        expiration: 30 * 24 * 60 * 60 * 1000
-    })
+        secret: config.sessionSecret,
+        resave: false,
+        saveUninitialized: true,
+        store: new SequelizeStore({
+            db: sequelize, 
+            table: 'WebSession',
+            checkExpirationInterval: 24 * 60 * 60 * 1000,
+            expiration: 30 * 24 * 60 * 60 * 1000
+        })
     }));
     
     var port = process.env.PORT || config.listenPort || 8080;
     
     app.use(express.static(config.publicDir));
     app.use(require('./controllers'));
+    
+        
+    chat.initialize(config.chatRoom,
+        function (err) {
+            if (err) {
+                console.log('Could not initialize chatroom: ' + err);
+            }
+        }
+    );
     
     app.listen(port);
     console.log('Server is listening on port ' + port);

@@ -1,8 +1,8 @@
 ﻿var $ = require('jquery');
 var Static = require('./static');
 var Base64 = require('./base64');
+var statics = require('../modules/static.js')
 
-var token = 0;
 var lastMessageId = 0;
 var messageLog;
 var title = document.title;
@@ -15,7 +15,7 @@ var currentName = '';
 var sendRequest = function (object, callback, errorCallback) {
     var thisReference = this;
     $.ajax({
-        url: "http://servers.quakeone.com/chat",
+        url: statics.serverRoot + '/chat',
         contentType: 'application/json',
         dataType: 'json',
         type: "post",
@@ -78,12 +78,8 @@ var chatClient = {
             this.clearMessageLog();
             $(this.options.messageBox).html();
 
-            token = this.getCookieValue('usertoken');
-            if (!token || token <= 0) {
-                this.newUser(this.start);
-            } else {
-                this.start();
-            }
+            this.start();
+            
             this.initialized = true;
         }
         this.setNameChangeHint();
@@ -114,7 +110,6 @@ var chatClient = {
         var request = {
             requestType: "removeMessage",
             data: {
-                token: token,
                 messageId: messageId
             }
         };
@@ -132,28 +127,7 @@ var chatClient = {
             }
         }
     },
-    newUser: function (callback) {
-        var request = {
-            requestType: "newUser",
-            data: {
-            }
-        };
-
-        sendRequest.call(this, request, function (response) {
-            if (response.data.token) {
-                this.setCurrentUser(response.data.name, response.data.token);
-                if (response.status == 'success') {
-                    if (callback)
-                        callback.call(this);
-                } else {
-                    alert("Error connecting as a new user: " + response.error.message);
-                }
-            }
-        });
-    },
-    setCurrentUser: function (name, newToken) {
-        this.setCookieValue('usertoken', newToken);
-        token = newToken;
+    setCurrentUser: function (name) {
         // set start message to name change
         currentName = name;
 
@@ -183,13 +157,7 @@ var chatClient = {
     start: function () {
         this.refresh(function (response) {
             if (response.status == 'failure') {
-                // we can recover from code 3.
-                if (response.error.code === 3) {
-                    this.newUser(this.start);
-                    return;
-                } else {
-                    alert(response.error.message);
-                }
+                alert(response.error.message);
             } else {
                 this.longPoll();
             }
@@ -198,10 +166,7 @@ var chatClient = {
 
     disconnectFromChat: function () {
         var request = {
-            requestType: "disconnectUser",
-            data: {
-                token: token
-            }
+            requestType: "disconnectUser"
         };
 
         sendRequest.call(this, request, function (response) {
@@ -209,13 +174,9 @@ var chatClient = {
         });
     },
     changeName: function (name) {
-
-        if (!token) return;
-
         var request = {
             requestType: "changeName",
             data: {
-                token: token,
                 name: Base64.encode(name)
             }
         };
@@ -230,7 +191,6 @@ var chatClient = {
         var request = {
             requestType: "sendMessage",
             data: {
-                token: token,
                 message: message
             }
         };
@@ -243,7 +203,6 @@ var chatClient = {
         var request = {
             requestType: "messagePoll",
             data: {
-                token: token,
                 lastMessageId: 0,
                 refresh: true
             }
@@ -272,7 +231,6 @@ var chatClient = {
         var request = {
             requestType: "messagePoll",
             data: {
-                token: token,
                 lastMessageId: lastMessageId,
                 refresh: false
             }
@@ -317,7 +275,7 @@ var chatClient = {
             this.options.errorText.text(text);
         }
     },
-    processMessageCommand: function (message) {
+    processMessageCommand: function (message) { 
         var split = message.split(' ');
         if (split.length > 1) {
             var command = split[0].toUpperCase();
