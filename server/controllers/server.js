@@ -32,11 +32,12 @@ router.get('/detail/:serverId', function(req, res) {
 
 router.get('/ranks/:serverId', function(req, res) {
     var serverId = (req.params.serverId && parseInt(req.params.serverId)) || 0;
-            
+    var date = u.formatDate(new Date());
+    
     var responseObj = { serverdetail: {}};
     
     Promise.all([
-        server.getPlayerRanks(serverId).then(u.setProp('ranks',responseObj.serverdetail))
+        server.getPlayerRanks(serverId, date).then(u.setProp('ranks',responseObj.serverdetail))
     ])
         .then(r.always(responseObj))
         .then(response.sendWithFormat(api.json, res), response.sendError(res));

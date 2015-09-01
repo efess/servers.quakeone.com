@@ -42,7 +42,7 @@ router.get('/aliases/:playerId', function(req, res) {
             
     var responseObj = {};
     
-    player.lookup(playerId, pageNumber, pageSize)
+    player.getAliases(playerId, pageNumber, pageSize)
         .then(r.compose(r.always(responseObj), u.setProp('playeraliases', responseObj)))
         .then(response.sendWithFormat(api.json, res), response.sendError(res));
 });
