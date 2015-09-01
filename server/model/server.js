@@ -49,7 +49,10 @@ var processPlayerData = (function() {
                     if(result) {
                         if(result.Players){
                             var players = result.Players.Player;
-                            server.Players = r.map(playerMap, players);
+                            server.Players = r.map(playerMap, 
+                                r.filter(function(player) { 
+                                    return !!player && player.PlayerId; 
+                                }, players));
                             server.CurrentPlayerCount = players.length;
                         }
                         resolve(server);
