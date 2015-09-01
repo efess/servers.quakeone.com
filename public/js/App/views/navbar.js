@@ -51,8 +51,9 @@ var NavBar = Backbone.View.extend({
 
         for(var secIdx in this.sections){
             var section = this.sections[secIdx];
-            var il = $('<li/>')
+            var il = $('<li class="nav-item"/>')
                 .append($('<a/>')
+                    .addClass('nav-link')
                     .prop("href",section.navigate)
                     .text(section.name));
 
@@ -70,14 +71,15 @@ var NavBar = Backbone.View.extend({
             if (elem.id === Static.gameId) {
                 currentSelection = elem.name;
             }
-            dropDownList.append($('<li><a href="/' + link + '/' + elem.id + '">' + elem.name +'</a></li>'))
+            dropDownList.append($('<li class="nav-item"><a href="/' + link + '/' + elem.id + '" class="nav-link">' + elem.name +'</a></li>'))
         });
 
-        ul.append($('<li class="dropdown"/>')
+        ul.append($('<li class="dropdown nav-item"/>')
             .append($('<a/>')
                 .attr('href', '/#')
                 .addClass('dropdown-toggle')
                 .addClass('data-bypass')
+                .addClass('nav-link')
                 .attr('data-toggle', 'dropdown')
                 .text(currentSelection)
                 .append($('<b class="caret"/>')))
@@ -88,10 +90,11 @@ var NavBar = Backbone.View.extend({
 
         for(var linkIdx in this.links){
             var link = this.links[linkIdx];
-            var il = $('<li/>')
+            var il = $('<li class="nav-item"/>')
                 .append($('<a/>')
                     .prop('href', link.href)
                     .addClass('data-bypass')
+                    .addClass('nav-link')
                     .prop('target', '_blank')
                     .text(link.name));
 

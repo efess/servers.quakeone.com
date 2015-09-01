@@ -71,10 +71,10 @@ var ServerDetailView = Backbone.View.extend({
                 });
             this.infoView.model.on('change', function () {
                 var info = this.model.get('info');
-                var header = info.Name;
+                var header = "Details of " + info.Name;
                 if(info.DNS !== info.Name)
                     header = header + " (" + info.DNS + ")";
-                $('#header').text(header);
+                $('.server-header').text(header);
             }, this.infoView);
             this.infoView.render();
         }

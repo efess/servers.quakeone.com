@@ -15,6 +15,9 @@ var ServerListView = Backbone.View.extend({
     initialize: function () {
         //this.listenTo(this.model, "change", this.render);
     },
+    events: {
+        'click tr': 'viewServer'
+    },
     startRefresh: function () {
         var self = this;
         this.autoRefresh = true;
@@ -38,6 +41,13 @@ var ServerListView = Backbone.View.extend({
         this.model = new ServerList({ id: this.id });
         this.model.on('change', this.render, this);
         this.model.fetch();
+    },
+    viewServer: function(evnt){
+        if (evnt.currentTarget) {
+            var serverId = $(evnt.currentTarget).attr('sid');
+            if (!serverId) return;
+            Backbone.history.navigate("servers/" + serverId, true);
+        }
     },
     template: _.template($('#server-list').html()),
     render: function (eventName) {

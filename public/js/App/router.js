@@ -63,10 +63,7 @@ var AppRouter = Backbone.Router.extend({
     },
     home: function (id) {
         if (id) {
-            var parsed = parseInt(id);
-            if (parsed) {
-                Static.gameId = parseInt(id);
-            }
+            Static.gameId = parseInt(id) || 0;
         }
         this.homeView.id = Static.gameId;
         this.homeView.render();

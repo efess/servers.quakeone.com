@@ -394,15 +394,15 @@ var chatClient = {
         var len = Base64.decode(message.name).length;
 
         box.append(
-            $('<div/>')
-            .append(this.getTime(message.date))
+                $('<div/>')
+                .append(this.getTime(message.date))
             .addClass("messageBlob")
             .append(
                 $('<canvas class="name-graphic" width="' + (len * 12) + '" height="12" value="' + message.name + '"></canvas>'))
             .attr("style", "float: left; width:85%;"));
 
         var messageDiv = $('<div/>')
-            .attr("style", "border:1px solid #dddddd;border-radius:4px;margin: 3px;padding: 3px;float: right; background-color: #f5f5f5; width:85%;")
+            .addClass('chat-message')
             .attr("key", message.key);
 
         $.each(message.messages, function (idx, message) {
@@ -418,6 +418,9 @@ var chatClient = {
     }
     ,getTime: function (date) {
         //var date = new Date(dateStr);
+        var dayOfMonth = date.getDate();
+        var monthOfYear = date.getMonth() + 1;
+        
         var t = "AM";
         var minutes = date.getMinutes();
         if (minutes < 10)
@@ -428,7 +431,7 @@ var chatClient = {
             t = "PM";
         }
 
-        return hours + ":" + minutes + " " + t + " ";
+        return monthOfYear + "/" + dayOfMonth + " " + hours + ":" + minutes + " " + t + " - ";
     } ,
     updateMessages: function (messages) {
 

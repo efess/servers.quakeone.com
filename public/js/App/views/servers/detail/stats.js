@@ -72,54 +72,9 @@ var ServerDetailStatsView = Backbone.View.extend({
         
         var myBarChart = new Chart(
             document.getElementById("mapPercentageChart").getContext("2d")
-        ).HorizontalBar(data, {});
-        
-        // $.plot($("#mapPercentageChart"), [
-        //     {
-        //         data: percentageArray,
-        //         bars: 
-        //             {
-        //                 //barWidth: 6,
-        //                 barWidth: 0.5,
-        //                 align: "center",
-
-        //                 horizontal: true,
-        //             show:true
-        //             }, valueLabels: {
-        //                 show: true,
-        //                 plotAxis: "x",
-        //                 labelFormatter: function (val) {
-        //                     return val + "%";
-        //                 }
-        //                 , font: '14px "Helvetica Neue", Helvetica, Arial, sans-serif'
-        //             }
-        //     }],
-        //     {
-        //         grid: {
-        //             borderWidth: 0
-        //         },
-        //         yaxis: {
-        //             show: true,
-        //             tickLength: 0,
-        //             tickSize: 1,
-        //             tickFormatter: function (val, axis) {
-        //                 return ticks[val] || '';
-        //                 //return val;
-        //             },
-        //             font:{
-        //                 size: 14,
-        //                 weight: "bold",
-        //                 family: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-        //                 color: '#000000'
-        //             } 
-
-        //         },
-        //         xaxis: {
-        //             min: 0,
-        //             max: maxValue > 80 ? 100 : maxValue + 15,
-        //             show: true
-        //         }
-        //     });
+        ).HorizontalBar(data, {
+            responsive: true,
+            maintainAspectRatio: true});
     },
     applyNameMaker: function () {
 

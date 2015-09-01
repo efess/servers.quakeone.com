@@ -16,7 +16,8 @@ var HomeView = Backbone.View.extend({
     tagName: 'div',
     template: _.template($('#home').html()),
     events: {
-        'click a#toggleRefresh': 'toggleRefresh'
+        'click a#toggleRefresh': 'toggleRefresh',
+        'click tr': 'viewServer'
     },
     render: function (eventName) {
         var self = this;
@@ -48,6 +49,13 @@ var HomeView = Backbone.View.extend({
         }
 
         return this;
+    },
+    viewServer: function(evnt){
+        if (evnt.currentTarget) {
+            var serverId = $(evnt.currentTarget).attr('sid');
+            if (!serverId) return;
+            Backbone.history.navigate("servers/" + serverId, true);
+        }
     },
     timerRunning: false,
     timerIntervalId: -1,

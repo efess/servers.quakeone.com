@@ -7,7 +7,7 @@ window.jQuery = $;
 var Static = require('../../modules/static');
 var DateTime = require('../../modules/datetime');
 var ChatClient = require('../../modules/chatClient');
-require('bootstrap');
+var bootstrap = require('../../../../lib/bootstrap/js/bootstrap');
 
 var ChatView = Backbone.View.extend({
     chatClient: null, //initialized in initialize

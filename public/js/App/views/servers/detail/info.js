@@ -65,7 +65,9 @@ var ServerDetailInfoView = Backbone.View.extend({
         ).Line(data, {
             scaleShowHorizontalLines: false,
             showTooltips: false,
-            scaleShowLabels: false
+            scaleShowLabels: false,
+            responsive: true,
+            maintainAspectRatio: true,
         });
     },
     getHourlyArray: function(jsonHourly){
