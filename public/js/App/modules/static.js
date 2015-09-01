@@ -10,7 +10,7 @@ var Static = {
         this.nameMaker = new NameMaker('/content/charsets/quake1/charset-1.png')
         
     },
-    serverRoot: "http://localhost:8080",
+    serverRoot: "",
     gameId: 0
 
 }
