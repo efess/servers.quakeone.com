@@ -41,7 +41,7 @@ var processPlayerData = (function() {
     return function(server) {
         server.CurrentPlayerCount = 0;
         server.Players = [];
-        if(!server.PlayerData) {
+        if(!server.PlayerData || server.CurrentStatus !== 0) {  // If Status is not 0, this server is down - therefore can't have any players.
             return Promise.resolve(server);
         } else {
             return new Promise(function(resolve,reject) {
