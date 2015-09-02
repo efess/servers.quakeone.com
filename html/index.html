@@ -78,8 +78,8 @@
                 <thead>
                     <tr>
                         <th colspan="2">Server</th>
-                        <th>Players/Max</th>
-                        <th>Mod/Map</th>
+                        <th class="align-right">Players/Max</th>
+                        <th class="align-right">Map/Mod</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,8 +87,8 @@
                     <% _.each(servers, function(server,idx){ %>
                     <tr sid="<%= server.ServerId %>" class="link-row">
                         <td class="row-main-cell" colspan="2"><%= server.DNS %><% if(server.Port !== '26000') print(':' + server.Port); %></td>
-                        <td><%= server.CurrentPlayerCount %> / <%= server.MaxPlayers %></td>
-                        <td><%= server.Mod %>/<%= server.Map %> </td>
+                        <td class="align-right"><%= server.CurrentPlayerCount %> / <%= server.MaxPlayers %></td>
+                        <td class="align-right"><%= server.Map %>/<%= server.Mod %></td>
                     </tr>
                     <% if(server.Players != null && server.Players.length > 0) { %>
 
@@ -99,11 +99,11 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Time</th>
+                                        <th class="align-right">Time</th>
                                         <% if(server.GameId == 0) { %>
                                         <th>Colors</th>
                                         <% } %>
-                                        <th>Score</th>
+                                        <th class="align-right">Score</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -115,7 +115,7 @@
                                                 <canvas class="name-graphic" width="192" height="13" value="<%= player.NameBase64 %>"></canvas>
                                             </a>
                                         </td>
-                                        <td><%= player.TotalPlayTime %></td>
+                                        <td class="align-right"><%= player.TotalPlayTime %></td>
 
                                         <% if(server.GameId == 0) { %>
                                         <td>
@@ -135,7 +135,7 @@
                                             </table>
                                         </td>
                                         <% } %>
-                                        <td>  <%= player.Score %></td>
+                                        <td class="align-right">  <%= player.Score %></td>
                                     </tr>
                                     <% }); %>
                             </table>
@@ -202,9 +202,9 @@
                     <tr>
                         <th colspan="2">Address</th>
                         <th>Name</th>
-                        <th>Players</th>
-                        <th>Mod/Map</th>
-                        <th>Status</th>     
+                        <th class="align-right">Players</th>
+                        <th class="align-right">Map/Mod</th>
+                        <th class="align-right">Status</th>     
                     </tr>
                 </thead>
                 <tbody>
@@ -214,9 +214,9 @@
                     <tr sid="<%= server.ServerId %>" class="link-row">
                         <td class="row-main-cell" colspan="2"><%= server.DNS %><% if(server.Port !== '26000') print(':' + server.Port); %></td>
                         <td> <%= server.Name %></td>
-                        <td><%= server.CurrentPlayerCount %> / <%= server.MaxPlayers %></td>
-                        <td> <%= server.Mod %> / <%= server.Map %> </td>
-                        <td> <%= server.Status %> </td>
+                        <td class="align-right"><%= server.CurrentPlayerCount %> / <%= server.MaxPlayers %></td>
+                        <td class="align-right"> <%= server.Map %>/<%= server.Mod %>  </td>
+                        <td class="align-right"> <%= server.Status %> </td>
                     </tr>
                     <% if(server.Players != null && server.Players.length > 0) { %>
                     <tr>
@@ -229,9 +229,9 @@
                                         <% if(server.GameId == 0) { %>
                                         <th>Colors</th>
                                         <% } %>
-                                        <th>Score (Total)</th>
-                                        <th>Online Time</th>
-                                        <th>FPM</th>
+                                        <th class="align-right">Score (Total)</th>
+                                        <th class="align-right">Online Time</th>
+                                        <th class="align-right">FPM</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -261,9 +261,9 @@
                                             </table>
                                         </td>
                                         <% } %>
-                                        <td><%= player.Score %> (<%= player.TotalScore %>)</td>
-                                        <td><%= player.TotalPlayTime %> </td>
-                                        <td><%= player.CurrentFPM %> </td>
+                                        <td class="align-right"><%= player.Score %> (<%= player.TotalScore %>)</td>
+                                        <td class="align-right"><%= player.TotalPlayTime %> </td>
+                                        <td class="align-right"><%= player.CurrentFPM %> </td>
                                         <td></td>
                                     </tr>
                                     <% }); %>
@@ -329,10 +329,10 @@
             <thead>
                 <tr>
                     <th>When</th>
-                    <th>Length</th>
-                    <th>Players</th>
-                    <th>Mod</th>
-                    <th>Map</th>
+                    <th class="align-right">Length</th>
+                    <th class="align-right">Players</th>
+                    <th class="align-right">Mod</th>
+                    <th class="align-right">Map</th>
                 </tr>
             </thead>
             <tbody id="serverMatchsRows">
@@ -375,10 +375,10 @@
     <script type="text/template" id="server-detail-match">
         <tr mid="<%= MatchId %>" class="link-row">
             <td><%= MatchStart %></td>
-            <td><%= MatchDuration %></td>
-            <td><%= PlayerCount %></td>
-            <td><%= Mod %></td>
-            <td><%= Map %></td>
+            <td class="align-right"><%= MatchDuration %></td>
+            <td class="align-right"><%= PlayerCount %></td>
+            <td class="align-right"><%= Mod %></td>
+            <td class="align-right"><%= Map %></td>
         </tr>
     </script>
     <script type="text/template" id="server-detail-ranks">
@@ -420,7 +420,7 @@
                 <thead>
                 <th></th>
                 <th>Player</th>
-                <th>Time Played</th>
+                <th class="align-right">Time Played</th>
                 </thead>
                 <tbody>
                     <% if(typeof stats != 'undefined') { %>
@@ -434,7 +434,7 @@
                         <td>
                             <a href="player/<%= pt.PlayerId %>"><canvas class="name-graphic" width="192" height="12" value="<%= pt.AliasBase64 %>"></canvas></a>
                         </td>
-                        <td><%= pt.PlayTime %></td>
+                        <td class="align-right"><%= pt.PlayTime %></td>
                     </tr>
                     <% }); %>
                     <% } %>
@@ -483,10 +483,10 @@
                         <% if(typeof GameId != 'undefined' && GameId == 0) { %>
                         <th>Colors</th>
                         <% } %>
-                        <th>Score</th>
-                        <th>Late</th>
-                        <th>Duration</th>
-                        <th>FPM</th>
+                        <th class="align-right">Score</th>
+                        <th class="align-right">Late</th>
+                        <th class="align-right">Duration</th>
+                        <th class="align-right">FPM</th>
                     </tr>
                 </thead>
                 <tbody id="matchPlayersRows">
@@ -518,10 +518,10 @@
                             </table>
                         </td>
                         <% } %>
-                        <td><%= player.Frags %></td>
-                        <td><%= player.Late %></td>
-                        <td><%= player.Duration %></td>
-                        <td><%= player.FPM %></td>
+                        <td class="align-right"><%= player.Frags %></td>
+                        <td class="align-right"><%= player.Late %></td>
+                        <td class="align-right"><%= player.Duration %></td>
+                        <td class="align-right"><%= player.FPM %></td>
                     </tr>
                     <% }); %>
                     <% } else { %>
@@ -609,10 +609,10 @@
             <thead>
                 <tr>
                     <th>Started</th>
-                    <th>Length</th>
-                    <th>Mod</th>
-                    <th>Map</th>
-                    <th>Server</th>
+                    <th class="align-right">Length</th>
+                    <th class="align-right">Mod</th>
+                    <th class="align-right">Map</th>
+                    <th class="align-right">Server</th>
                 </tr>
             </thead>
             <tbody id="playerMatchsRows"></tbody>
@@ -625,7 +625,7 @@
             <thead>
                 <tr>
                     <th>Alias</th>
-                    <th>Last Seen</th>
+                    <th class="align-right">Last Seen</th>
                 </tr>
             </thead>
             <tbody>
@@ -637,7 +637,7 @@
                             <canvas class="name-graphic" width="192" height="12" value="<%= alias.AliasBase64 %>"></canvas>
                         </a>
                     </td>
-                    <td><%= alias.LastSeenAgo %> <% if(alias.LastSeenAgo !== 'Now') print('ago'); %></td>
+                    <td class="align-right"><%= alias.LastSeenAgo %> <% if(alias.LastSeenAgo !== 'Now') print('ago'); %></td>
                 </tr>
                 <% }); %>
                 <% } else { %>
@@ -651,10 +651,10 @@
     <script type="text/template" id="player-detail-match">
         <tr mid="<%= MatchId %>" class="link-row">
             <td><%= JoinTime %></td>
-            <td><%= StayDuration %></td>
-            <td><%= Mod %></td>
-            <td><%= Map %></td>
-            <td><%= HostName %></td>
+            <td class="align-right"><%= StayDuration %></td>
+            <td class="align-right"><%= Mod %></td>
+            <td class="align-right"><%= Map %></td>
+            <td class="align-right"><%= HostName %></td>
         </tr>
     </script>
     <script type="text/template" id="player-search-form">
@@ -678,7 +678,7 @@
         <table class="table">
             <thead>
             <th>Player</th>
-            <th>Last Seen</th>
+            <th class="align-right">Last Seen</th>
             </thead>
             <tbody>
                 <% if(typeof players != 'undefined') { %>
@@ -689,7 +689,7 @@
                             <canvas class="name-graphic" width="256" height="16" value="<%= player.AliasBase64 %>"></canvas>
                         </a>
                     </td>
-                    <td><%= player.LastSeenAgo %> <% if(player.LastSeenAgo !== 'Now') print('ago'); %></td>
+                    <td class="align-right"><%= player.LastSeenAgo %> <% if(player.LastSeenAgo !== 'Now') print('ago'); %></td>
                 </tr>
                 <% }); %>
                 <% } %>
