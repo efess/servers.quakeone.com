@@ -43,6 +43,9 @@ var util = {
             return obj[field];
         }, mappingDefinition);
     }),
+    isArray: function(maybeArray){
+        return Object.prototype.toString.call(maybeArray) === '[object Array]';
+    },
     mapIndexed: r.curry(function(fn, array) {
         // fn(value, index)
         var idx = 0;

@@ -48,7 +48,9 @@ var processPlayerData = (function() {
                 xmlParser.parseString(server.PlayerData, function(err, result) {
                     if(result) {
                         if(result.Players){
-                            var players = result.Players.Player;
+                            var players = util.isArray(result.Players.Player) ? 
+                                result.Players.Player :
+                                [result.Players.Player];
                             server.Players = r.map(playerMap, 
                                 r.filter(function(player) { 
                                     return !!player && player.PlayerId; 
