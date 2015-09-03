@@ -2,7 +2,7 @@
 var Static = require('./static');
 var Base64 = require('./base64');
 var statics = require('../modules/static.js')
-
+ 
 var lastMessageId = 0;
 var messageLog;
 var title = document.title;
@@ -11,7 +11,7 @@ var messageBox = null;
 var level = 0;
 var currentName = '';
 //var nm = new nameMaker('/charsets/quake1/charset-1.png');
-
+ 
 var sendRequest = function (object, callback, errorCallback) {
     var thisReference = this;
     $.ajax({
@@ -29,22 +29,49 @@ var sendRequest = function (object, callback, errorCallback) {
                 }
     });
 }
+
+var windowHasFocus = false;
+var newMessageNotifyOn = false;
+ 
 var chatClient = {
     initialized: false,
+    newMessageNotifyLoop: (function(){
+        var originalTitle = document.title;
+        var newMessageText = "New Message";
+        var newMessageTextOn = false;
+       
+        var runMessageLoop = function(){
+            setTimeout(function(){
+                var shouldDisplayMessage = !windowHasFocus && newMessageNotifyOn;
+                if(!shouldDisplayMessage || newMessageTextOn) {
+                    if(newMessageTextOn){
+                        document.title = originalTitle;
+                        newMessageTextOn = false;
+                    }
+                } else if(!newMessageTextOn) {
+                    document.title = newMessageText;
+                    newMessageTextOn = true;
+                }
+                runMessageLoop();
+            }, 1000);
+        };
+        runMessageLoop();
+    }()),
     options: {
         errorText: null,
         messageBox: null,
         newMessageBox: null,
-        usersCallback: null
+        usersCallback: null,
+        container: $(document)
     },
     initialize: function (opt) {
         var self = this;
         $.extend(this.options, opt);
-
+ 
         if (this.options.messageBox === null) {
             return; // Need a messagebox to do anything useful.
         }
-
+ 
         window.onbeforeunload = function (e) {
             self.disconnectFromChat();
         }
@@ -64,7 +91,7 @@ var chatClient = {
         });
         $(document).on("click", "img", function (e) {
             if (level > 1) {
-               
+              
                 var img = e.target;
                 var span = $(img).closest("span.message");
                 self.selectMessage(span);
@@ -77,12 +104,21 @@ var chatClient = {
             // initialize internal log structure
             this.clearMessageLog();
             $(this.options.messageBox).html();
-
+ 
             this.start();
-            
+           
             this.initialized = true;
         }
         this.setNameChangeHint();
+       
+        window.onfocus = function(){
+            windowHasFocus = true;
+            newMessageNotifyOn = false;
+        }
+       
+        window.onblur = function(){
+            windowHasFocus = false;
+        }
     },
     setNameChangeHint: function () {
         var realName = Base64.decode(currentName);
@@ -115,7 +151,7 @@ var chatClient = {
         };
         // don't bother - server verifies level...
         sendRequest.call(this, request, function (response) {
-            
+           
         });
     },
     sendMessage: function (message) {
@@ -130,15 +166,15 @@ var chatClient = {
     setCurrentUser: function (name) {
         // set start message to name change
         currentName = name;
-
+ 
         var realName = Base64.decode(name);
         if (realName.substring(0, 7) === "Random-") {
-            
+           
             var newMessage = this.options.newMessageBox;
             if (!newMessage) return;
-
+ 
             newMessage.val('/name ' + realName);
-
+ 
             if (window.getSelection) {
                 var sel = window.getSelection();
                 sel.removeAllRanges();
@@ -153,7 +189,7 @@ var chatClient = {
         }
         this.setNameChangeHint();
     },
-
+ 
     start: function () {
         this.refresh(function (response) {
             if (response.status == 'failure') {
@@ -163,12 +199,12 @@ var chatClient = {
             }
         });
     },
-
+ 
     disconnectFromChat: function () {
         var request = {
             requestType: "disconnectUser"
         };
-
+ 
         sendRequest.call(this, request, function (response) {
             // w/e
         });
@@ -180,10 +216,10 @@ var chatClient = {
                 name: Base64.encode(name)
             }
         };
-
+ 
         sendRequest.call(this, request, function (response) {
             if (response.status == 'success') {
-                this.refresh();
+               this.refresh();
             }
         });
     },
@@ -194,7 +230,7 @@ var chatClient = {
                 message: message
             }
         };
-
+ 
         sendRequest.call(this, request, function (response) {
             // what do?
         });
@@ -207,14 +243,14 @@ var chatClient = {
                 refresh: true
             }
         };
-
+ 
         sendRequest.call(this, request, function (response) {
             if (response.status == 'success') {
                 this.updateUsers(response.data.users);
                 this.updateMessages(response.data.messages);
                 this.removeMessages(response.data.removed);
                 this.applyNameMaker();
-
+ 
                 if (currentName != response.data.name) {
                     currentName = response.data.name;
                     this.setNameChangeHint();
@@ -227,7 +263,7 @@ var chatClient = {
         });
     },
     longPoll: function () {
-
+ 
         var request = {
             requestType: "messagePoll",
             data: {
@@ -235,12 +271,12 @@ var chatClient = {
                 refresh: false
             }
         };
-        
+       
         sendRequest.call(this,
             request,
             function (response) {
                 if (response.status == 'success') {
-
+ 
                     level = response.data.level;
                     if (response.data.users !== undefined) {
                         this.updateUsers(response.data.users);
@@ -262,7 +298,7 @@ var chatClient = {
                     self.clearError();
                     self.longPoll();
                 }, 10000);
-                
+               
             });
     },
     clearError: function(){
@@ -275,7 +311,7 @@ var chatClient = {
             this.options.errorText.text(text);
         }
     },
-    processMessageCommand: function (message) { 
+    processMessageCommand: function (message) {
         var split = message.split(' ');
         if (split.length > 1) {
             var command = split[0].toUpperCase();
@@ -286,7 +322,7 @@ var chatClient = {
                     this.changeName(newName);
                     break;
             }
-
+ 
         }
     },
     clearMessageLog: function () {
@@ -299,8 +335,8 @@ var chatClient = {
         var now = new Date(message.date);
         var tooLong = new Date();
         tooLong.setTime((3 * 60000) + now.getTime());
-
-
+ 
+ 
         if (messageLog.tip.userId == message.userId
             && messageLog.tip.name == message.name
             && messageLog.tip.expires > now) {
@@ -311,7 +347,7 @@ var chatClient = {
                 messageId: message.messageId
             });
         } else {
-
+ 
             messageLog.tip = {
                 expires: tooLong,
                 userId: message.userId,
@@ -324,7 +360,7 @@ var chatClient = {
                 }],
                 messageTip: message
             }
-
+ 
             messageLog.log.push(messageLog.tip);
         }
     },
@@ -344,7 +380,7 @@ var chatClient = {
                     }
                 }
                 message.remove();
-
+ 
                 if (parent.children().length <= 0) {
                     parent.prev().remove();// remove name div
                     parent.remove(); // remove this div
@@ -367,18 +403,18 @@ var chatClient = {
         //}
     },
     redrawMessages: function (messages) {
-
+ 
         // make a local reference.
         var messageBox = this.options.messageBox;
-
+ 
         this.clearMessageLog();
         lastMessageId = 0;
         messageBox.empty();
-
+ 
         $.each(messages, function (idx, elem) {
             this.appendMessage(elem);
         });
-
+ 
         $.each(messageLog.log, function (idx, elem) {
             this.addMessageToBox(elem, messageBox);
         });
@@ -388,11 +424,11 @@ var chatClient = {
         //}, 20);
         this.processMessageImagesInContainer(messageBox, messageBox);
         messageBox.scrollTop(messageBox[0].scrollHeight);
-
+ 
     },
     addMessageToBox: function (message, box) {
         var len = Base64.decode(message.name).length;
-
+ 
         box.append(
                 $('<div/>')
                 .append(this.getTime(message.date))
@@ -400,27 +436,27 @@ var chatClient = {
             .append(
                 $('<canvas class="name-graphic" width="' + (len * 12) + '" height="12" value="' + message.name + '"></canvas>'))
             .attr("style", "float: left; width:85%;"));
-
+ 
         var messageDiv = $('<div/>')
             .addClass('chat-message')
             .attr("key", message.key);
-
+ 
         $.each(message.messages, function (idx, message) {
             if (idx > 0)
                 messageDiv.append('<br>');
             messageDiv.append(
                 $('<span class="message" mid="' + message.messageId + '">' + message.message + "</span>"));
         });
-
+ 
         box.append(messageDiv);
-
+       
         return messageDiv;
     }
     ,getTime: function (date) {
         //var date = new Date(dateStr);
         var dayOfMonth = date.getDate();
         var monthOfYear = date.getMonth() + 1;
-        
+       
         var t = "AM";
         var minutes = date.getMinutes();
         if (minutes < 10)
@@ -430,11 +466,11 @@ var chatClient = {
             hours = hours - 12;
             t = "PM";
         }
-
+ 
         return monthOfYear + "/" + dayOfMonth + " " + hours + ":" + minutes + " " + t + " - ";
     } ,
     updateMessages: function (messages) {
-
+ 
         // make a local reference.
         var messageBox = this.options.messageBox;
         var self = this;
@@ -450,25 +486,25 @@ var chatClient = {
         }
         var lastDiv = $('div:last-child', messageBox);
         var lastSpan = $('span:last-child', lastDiv);
-
+ 
         var lastAddedMessageId = parseInt(lastSpan.attr('mid') || -1);
         var lastAddedBlobId = parseInt(lastDiv.attr('key') || -1);
         var workingBlob = null;
-
+ 
         $.each(messageLog.log, function (bdx, nameBlob) {
             if (nameBlob.key === lastAddedBlobId) {
                 workingBlob = nameBlob;
                 return false
             }
         });
-
+ 
         if (workingBlob) {
             var addedStuff = false;
             $.each(workingBlob.messages, function (idx, message) {
                 if (message.messageId > lastAddedMessageId) {
                     lastDiv.append(
                         $('<br><span class="message" mid="' + message.messageId + '">' + message.message + "</span>"));
-
+ 
                     addedStuff = true;
                 }
             });
@@ -478,20 +514,22 @@ var chatClient = {
                 });
             }
         }
-
-
+ 
         $.each(messageLog.log, function (bdx, nameBlob) {
             if (nameBlob.key > lastAddedBlobId) {
                 var div = self.addMessageToBox(nameBlob, messageBox);
-
+ 
                 $('img', div).each(function (idx, img) {
                     imageFunctions.makeImageZoomable(img);
                 });
             }
         });
-
+ 
         messageBox.scrollTop(messageBox[0].scrollHeight);
         this.processMessageImagesInContainers(messageBox);
+        if(!windowHasFocus && this.options.container.is(":visible")){
+            newMessageNotifyOn = true; 
+        }    
     },
     processMessageImagesInContainers: function (messageBox) {
         var imageLoading = 0;
@@ -499,7 +537,7 @@ var chatClient = {
             if (!img.complete) {
                 imageLoading++;
                 $(img).load(function () {
-
+ 
                     imageLoading--;
                     if (imageLoading <= 0) {
                         messageBox.scrollTop(messageBox[0].scrollHeight);
@@ -507,17 +545,17 @@ var chatClient = {
                 });
             }
         });
-
+ 
         if (imageLoading == 0) {
-
+ 
             setTimeout(function () {
                 messageBox.scrollTop(messageBox[0].scrollHeight);
             }, 60);
         }
-
+ 
     },
     trimString: function (str) {
-        return str.replace(/^\s+|\s+$/g, ''); 
+        return str.replace(/^\s+|\s+$/g, '');
     }
     ,
     getCookieValue: function (key) {
@@ -542,21 +580,21 @@ var chatClient = {
     },
     applyNameMaker: function () {
         $.each($('.name-graphic'), function (i, canvas) {
-
+ 
             if (canvas.getContext) {
-                var base64 = $.attr(canvas, 'value');
+               var base64 = $.attr(canvas, 'value');
                 if (base64 !== undefined &&
                     base64 !== null && base64 !== '') {
-
+ 
                     var ctx = canvas.getContext("2d");
                     var size = Static.nameMaker.writeName(ctx, base64, canvas.height);
-                    //              
+                    //             
                 }
             }
         });
     }
 }
-
+ 
 // Taken from Reddit Enhancement Suite - Because it's awesome
 var imageFunctions = {
     dragTargetData: {
@@ -571,7 +609,7 @@ var imageFunctions = {
         imageTag.addEventListener('mousemove', imageFunctions.dragImage, false);
         imageTag.addEventListener('mouseout', imageFunctions.mouseoutImage, false);
         imageTag.addEventListener('click', imageFunctions.clickImage, false);
-
+ 
     },
     mousedownImage: function (e) {
         if (e.button === 0) {
@@ -593,7 +631,7 @@ var imageFunctions = {
                 oldDiagonal = imageFunctions.dragTargetData.diagonal,
                 imageWidth = imageFunctions.dragTargetData.imageWidth,
                 maxWidth = Math.max(e.target.minWidth, newDiagonal / oldDiagonal * imageWidth);
-
+ 
             imageFunctions.resizeImage(e.target, maxWidth);
             imageFunctions.dragTargetData.dragging = true;
         }
@@ -606,7 +644,7 @@ var imageFunctions = {
         var rc = e.target.getBoundingClientRect(),
             p = Math.pow,
             dragSize = p(p(e.clientX - rc.left, 2) + p(e.clientY - rc.top, 2), .5);
-
+ 
         return Math.round(dragSize);
     },
     clickImage: function (e) {
@@ -622,12 +660,12 @@ var imageFunctions = {
         var currWidth = $(image).width();
         if (newWidth !== currWidth) {
             imageFunctions.dragTargetData.hasChangedWidth = true;
-
+ 
             image.style.width = newWidth + 'px';
             image.style.maxWidth = newWidth + 'px';
             image.style.maxHeight = '';
             image.style.height = 'auto';
-
+ 
             var thisPH = $(image).data('imagePlaceholder');
             $(thisPH).width($(image).width() + 'px');
             $(thisPH).height($(image).height() + 'px');

@@ -99,7 +99,7 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th class="align-right">Time</th>
+                                        <th class="align-right">Length</th>
                                         <% if(server.GameId == 0) { %>
                                         <th>Colors</th>
                                         <% } %>
@@ -157,7 +157,7 @@
                 <tr>
                     <th>Where</th>
                     <th>Ended</th>
-                    <th>Mod/Map</th>
+                    <th>Map/Mod</th>
                 </tr>
             </thead>
             <tbody id="serverMatchsRows">
@@ -167,7 +167,7 @@
                     <td><%= match.HostName %></td>
                     <td><%= match.MatchEndAgo %> <% if(match.MatchEndAgo !== 'Now') print('ago'); %></td>
                     <!--<td><%= match.PlayerCount %></td>-->
-                    <td><%= match.Mod %>/<%= match.Map %></td>
+                    <td><%= match.Map %>/<%= match.Mod %></td>
                 </tr>
                 <% }); %>
                 <% } else { %>
@@ -360,8 +360,8 @@
         </tr>
         <% } %>
         <tr>
-            <td>Mod/Map</td>
-            <td><%= info.Mod %>/<%= info.Map %></td>
+            <td>Map/Mod</td>
+            <td><%= info.Map %>/<%= info.Mod %></td>
         </tr>
         <tr>
             <td>Players</td>

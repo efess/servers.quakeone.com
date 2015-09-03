@@ -32,7 +32,7 @@ var MatchDetailView = Backbone.View.extend({
             _.each(modelData.Players, function (player) {
                 var playerStart = new Date(player.PlayerMatchStart);
                 
-                
+                player.FPM = parseFloat(player.FPM).toFixed(2);  
                 var late = (playerStart.getTime() - originalStart.getTime()) / 1000;
                 if (late > 60)
                     player.Late =

@@ -76,6 +76,7 @@ var ServerListView = Backbone.View.extend({
             _.each(modelData.servers, function (server, idx) {
                 if (server.Players) {
                     _.each(server.Players, function (player, pdx) {
+                        player.CurrentFPM = parseFloat(player.CurrentFPM).toFixed(2);  
                         player.TotalPlayTime = DateTime.secToVerySmallTimespan(player.TotalPlayTime);
                     });
                 }

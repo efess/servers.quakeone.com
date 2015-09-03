@@ -44,7 +44,7 @@ a {
     border: 0;
 }
 .player-colors {
-    border: 0;
+    border: 1px solid #cccccc;
 }
 .site-header {
     font-size: 2rem;    

@@ -32,7 +32,8 @@ var ChatView = Backbone.View.extend({
             messageBox: $('#messages'),
             newMessageBox: $('#newMessage'),
             usersCallback: _.bind(this.userListUpdated, this),
-            errorText: $('#chatError')
+            errorText: $('#chatError'),
+            container: $('#chatBody')
         });
 
 
