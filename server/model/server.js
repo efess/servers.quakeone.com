@@ -31,9 +31,9 @@ var mapFieldValue = r.curry(function(fieldName, server) {
 });
 
 var sortPlayers = r.curry(function(players) {
-    return players.sort(function(playerA,playerB) {
-        return playerA.TotalFrags === playerB.TotalFrage ? 0 :
-            playerA.TotalFrags > playerB.TotalFrage ? -1 : 1;
+    return players.sort(function(playerA, playerB) {
+        return playerA.TotalFrags === playerB.TotalFrags ? 0 :
+            playerA.TotalFrags > playerB.TotalFrags ? -1 : 1;
     });
 });
 
