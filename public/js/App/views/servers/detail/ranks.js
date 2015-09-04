@@ -15,7 +15,8 @@ var ServerDetailRanksView = Backbone.View.extend({
             var modelData = $.extend(true, {}, this.model.toJSON());
             if(modelData.serverdetail && modelData.serverdetail.ranks) {
                 modelData.serverdetail.ranks= $.map(modelData.serverdetail.ranks, function(rank){
-                    rank.FPM = parseFloat(rank.FPM).toFixed(2);  
+                    rank.FPM = parseFloat(rank.FPM).toFixed(2);
+                    return rank;  
                 });
             }
             $(this.el).html(this.template(modelData));
