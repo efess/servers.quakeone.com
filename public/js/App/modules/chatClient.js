@@ -119,6 +119,8 @@ var chatClient = {
         window.onblur = function(){
             windowHasFocus = false;
         }
+        
+        windowHasFocus = true;
     },
     setNameChangeHint: function () {
         var realName = Base64.decode(currentName);

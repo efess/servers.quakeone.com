@@ -24,6 +24,19 @@ var maps = {
     }
 }
 
+// Yes.. Mutates state.
+var mapFieldValue = r.curry(function(fieldName, server) { 
+    server[fieldName] = maps[fieldName][server[fieldName]];
+    return server;
+});
+
+var sortPlayers = r.curry(function(players) {
+    return players.sort(function(playerA,playerB) {
+        return playerA.TotalFrags === playerB.TotalFrage ? 0 :
+            playerA.TotalFrags > playerB.TotalFrage ? -1 : 1;
+    });
+});
+
 var processPlayerData = (function() {
     var playerMap = util.fieldMap({
         'PlayerId': 'PlayerId',
@@ -38,6 +51,10 @@ var processPlayerData = (function() {
         'Shirt': 'Shirt',
         'Pant': 'Pant'
     });
+    
+    var hasPlayerId = r.filter(function(player) { return !!player && player.PlayerId; });
+    var playersFn = r.compose(r.map(playerMap), hasPlayerId, sortPlayers);
+    
     return function(server) {
         server.CurrentPlayerCount = 0;
         server.Players = [];
@@ -51,10 +68,8 @@ var processPlayerData = (function() {
                             var players = util.isArray(result.Players.Player) ? 
                                 result.Players.Player :
                                 [result.Players.Player];
-                            server.Players = r.map(playerMap, 
-                                r.filter(function(player) { 
-                                    return !!player && player.PlayerId; 
-                                }, players));
+                            
+                            server.Players = playersFn(players);
                             server.CurrentPlayerCount = players.length;
                         }
                         resolve(server);
@@ -67,11 +82,6 @@ var processPlayerData = (function() {
     }
 }());
 
-// Yes.. Mutates state.
-var mapFieldValue = r.curry(function(fieldName, server) { 
-    server[fieldName] = maps[fieldName][server[fieldName]];
-    return server;
-});
 
 var sortServers = function(servers) {
     return servers.sort(function(serverA, serverB) {
