@@ -14,11 +14,11 @@ var ServerDetailRanksView = Backbone.View.extend({
         if (this.model.has('serverdetail')) {
             var modelData = $.extend(true, {}, this.model.toJSON());
             if(modelData.serverdetail && modelData.serverdetail.ranks) {
-                var data = $.map(modelData.serverdetail.ranks, function(rank){
+                modelData.serverdetail.ranks= $.map(modelData.serverdetail.ranks, function(rank){
                     rank.FPM = parseFloat(rank.FPM).toFixed(2);  
                 });
             }
-            $(this.el).html(this.template(data));
+            $(this.el).html(this.template(modelData));
             
             this.applyNameMaker();
         } else {
