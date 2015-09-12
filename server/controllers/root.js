@@ -46,8 +46,9 @@ router.post('/logout', function(req, res) {
 router.get('*', function(req, res) {
     if(req.query.format){
         var formatter = apiFormat[req.query.format];
+        var gameId = (req.query.gameId && parseInt(req.query.gameId)) || 0
         if(formatter) {
-            server.allStatus()
+            server.getStatusByGame(gameId)
                 .then(formatBeforeTransform(req.query.format))
                 .then(formatter.transform)
                 .then(function(body) { 
