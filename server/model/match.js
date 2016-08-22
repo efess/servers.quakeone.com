@@ -27,7 +27,7 @@ var match = {
                                 .then(r.map(fieldMap));
             },
             'recentMatches-' + gameId,
-            30000);
+            15000);
         };
     }()),
     detail: (function(){

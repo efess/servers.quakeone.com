@@ -8,7 +8,7 @@ var cache = {
             return promise.resolve(status);
         } else {
             return fn().then(function(results){
-                memCache.put(results, cacheKey, ttl);
+                memCache.put(cacheKey, results, ttl);
                 return results;
             });
         }

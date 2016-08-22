@@ -120,7 +120,7 @@ var server = {
                 .then(r.map(r.compose(mapFieldValue('Status'), fieldMap)));
             },
             'serverStatus',
-            30000)
+            15000)
             .then(r.filter(r.propEq('GameId', gameId)))
 	},
     getHourly: function(serverId){
