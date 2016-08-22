@@ -21,9 +21,13 @@ var match = {
         });
         
         return function(gameId) {
-            return db.query('CALL spServerRecentMatches(?)', gameId)
-                .then(r.head)
-                .then(r.map(fieldMap));
+            return cache.cacheableFn(function() {
+                return db.query('CALL spServerRecentMatches(?)', gameId)
+                                .then(r.head)
+                                .then(r.map(fieldMap));
+            },
+            'recentMatches-' + gameId,
+            30000);
         };
     }()),
     detail: (function(){
