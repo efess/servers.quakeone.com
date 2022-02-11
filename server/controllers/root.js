@@ -59,7 +59,9 @@ router.get('*', function(req, res) {
             res.send('Invalid format.');
         }
     } else {
-        res.sendFile(path.join(__dirname, '../../html', 'index.html'));
+        res.sendFile(path.join(__dirname, '../../html', 'index.html'), (err => {
+
+        }));
     }
 });
 

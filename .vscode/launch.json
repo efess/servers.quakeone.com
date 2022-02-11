@@ -6,6 +6,7 @@
 		{
 			// Name of configuration; appears in the launch configuration drop down menu.
 			"name": "Launch main.js",
+			"request": "launch",
 			// Type of configuration. Possible values: "node", "mono".
 			"type": "node",
 			// Workspace relative or absolute path to the program.

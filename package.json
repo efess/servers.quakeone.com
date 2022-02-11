@@ -3,7 +3,10 @@
   "version": "2.0.0",
   "description": "Browse active quake servers",
   "main": "main.js",
-  "scripts": {},
+  "scripts": {
+    "build": "gulp",
+    "start": "node server/main.js"
+  },
   "author": "Joe Lukacovic",
   "repository": {
     "type": "git",
@@ -34,14 +37,14 @@
     "xml2js": "^0.4.10"
   },
   "devDependencies": {
-    "gulp": "^3.9.0",
     "browserify": "^10.2.6",
-    "gulp-sourcemaps": "^1.5.2",
-    "gulp-util": "^3.0.6",
-    "gulp-uglify": "^1.2.0",
     "browserify-shim": "^3.8.9",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
+    "gulp": "^4.0.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.6",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.2.3"
   },
   "license": "ISC"
