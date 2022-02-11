@@ -21,7 +21,7 @@ var match = {
         
         return function(gameId) {
             return cache.cacheableFn(function() {
-                return db.query('CALL spServerRecentMatches()')
+                return db.query('CALL spServerRecentMatches()', gameId)
                                 .then(r.head)
                                 .then(r.map(fieldMap));
             },
