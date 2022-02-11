@@ -22,7 +22,7 @@ router.get('/summary/:gameId', function(req, res) {
             server.getStatusByGame(gameId).then(util.setProp('servers', response.homedata))
         ])
         .then(r.always(response))
-        .then(resHelper.sendWithFormat(apiFormat.json, res), resHelper.sendError);
+        .then(resHelper.sendWithFormat(apiFormat.json, res), resHelper.sendError(res));
 })
 
 module.exports = router
