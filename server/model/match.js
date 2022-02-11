@@ -2,7 +2,6 @@ var db = require('../db');
 var cache = require('../cache');
 var Promise = require('promise');
 var r = require('ramda');
-var xml = require('xml2js');
 var util = require('../helpers/util')
 
 
@@ -22,7 +21,7 @@ var match = {
         
         return function(gameId) {
             return cache.cacheableFn(function() {
-                return db.query('CALL spServerRecentMatches(?)', gameId)
+                return db.query('CALL spServerRecentMatches()')
                                 .then(r.head)
                                 .then(r.map(fieldMap));
             },

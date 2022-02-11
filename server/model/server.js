@@ -3,10 +3,7 @@ var db = require('../db');
 var cache = require('../cache');
 var Promise = require('promise');
 var r = require('ramda');
-var xml = require('xml2js');
 var util = require('../helpers/util')
-
-var xmlParser = new xml.Parser({explicitArray: false});
 
 var maps = {
     GameId: {
@@ -58,27 +55,11 @@ var processPlayerData = (function() {
     return function(server) {
         server.CurrentPlayerCount = 0;
         server.Players = [];
-        if(!server.PlayerData || server.CurrentStatus !== 0) {  // If Status is not 0, this server is down - therefore can't have any players.
-            return Promise.resolve(server);
-        } else {
-            return new Promise(function(resolve,reject) {
-                xmlParser.parseString(server.PlayerData, function(err, result) {
-                    if(result) {
-                        if(result.Players){
-                            var players = util.isArray(result.Players.Player) ? 
-                                result.Players.Player :
-                                [result.Players.Player];
-                            
-                            server.Players = playersFn(players);
-                            server.CurrentPlayerCount = players.length;
-                        }
-                        resolve(server);
-                    } else {
-                        reject(err);
-                    }
-                });
-            });
+        if(server.PlayerData && server.CurrentStatus === 0) {  // If Status is not 0, this server is down - therefore can't have any players.
+            server.Players = playersFn(JSON.parse(server.PlayerData));
+            server.CurrentPlayerCount = server.Players.length;
         }   
+        return server
     }
 }());
 
@@ -115,9 +96,9 @@ var server = {
         // cache entire set
         return cache.cacheableFn(function(){ 
             return db.query('SELECT * FROM vServerDetail')
-                .then(r.compose(Promise.all, r.map(processPlayerData)))
+                .then(r.map(processPlayerData))
                 .then(sortServers)
-                .then(r.map(r.compose(mapFieldValue('Status'), fieldMap)));
+                .then(r.map(r.compose(mapFieldValue('Status'), fieldMap)))
             },
             'serverStatus',
             15000)
@@ -153,8 +134,7 @@ var server = {
         });
         
         var processServer = function(server) {
-              return processPlayerData(server)
-                .then(r.compose(mapFieldValue('Status'), mapFieldValue('GameId'), fieldMap))
+              return r.compose(mapFieldValue('Status'), mapFieldValue('GameId'), fieldMap)(processPlayerData(server))
         };
         
         var maybeEmpty= function(fn){
